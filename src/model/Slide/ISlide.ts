@@ -1,5 +1,5 @@
 import { ShapeType } from '../../common/ShapeType';
-import { IShape } from '../shape/IShape';
+import { IShape } from '../Shape/IShape';
 
 export interface ISlide
 {

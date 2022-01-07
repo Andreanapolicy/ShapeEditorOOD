@@ -1,7 +1,7 @@
 import { ISlide } from './ISlide';
 import { ShapeType } from '../../common/ShapeType';
-import { IShape } from '../shape/IShape';
-import Shape from '../shape/Shape';
+import { IShape } from '../Shape/IShape';
+import Shape from '../Shape/Shape';
 
 export default class Slide implements ISlide
 {
