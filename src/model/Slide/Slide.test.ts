@@ -15,7 +15,7 @@ describe('test of slide', () =>
 
     test('delete shape from empty slide', () =>
     {
-        const shape: IShape = new Shape({leftTopPoint: {top: 10, left: 10}, weight: 10, height: 10}, ShapeType.CIRCLE);
+        const shape: IShape = new Shape({leftTopPoint: {top: 10, left: 10}, width: 10, height: 10}, ShapeType.CIRCLE);
         const slide: ISlide = new Slide();
         let isDeleted: boolean = false;
         shape.doOnDelete(() => isDeleted = true);
@@ -26,7 +26,7 @@ describe('test of slide', () =>
 
     test('add item', () =>
     {
-        const shape: IShape = new Shape({leftTopPoint: {top: 10, left: 10}, weight: 10, height: 10}, ShapeType.TRIANGLE);
+        const shape: IShape = new Shape({leftTopPoint: {top: 10, left: 10}, width: 10, height: 10}, ShapeType.TRIANGLE);
         const slide: ISlide = new Slide();
         let isDeleted: boolean = false;
         slide.createShape(ShapeType.TRIANGLE);

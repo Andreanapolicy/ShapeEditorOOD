@@ -1,4 +1,4 @@
-import Application from '../../src/app/Application';
+import Application from './../../src/App/Application';
 
 document.addEventListener('DOMContentLoaded', () =>
 {

@@ -8,7 +8,7 @@ describe('test of shape factory', () =>
 {
     test('create circle', () =>
     {
-        const shape: IShape = new Shape({leftTopPoint: {top: 10, left: 10}, weight: 10, height: 10}, ShapeType.CIRCLE);
+        const shape: IShape = new Shape({leftTopPoint: {top: 10, left: 10}, width: 10, height: 10}, ShapeType.CIRCLE);
         const shapeFactory: IShapeFactory = new ShapeFactory();
 
         expect(shapeFactory.createShape(ShapeType.CIRCLE)).toEqual(shape);
@@ -16,7 +16,7 @@ describe('test of shape factory', () =>
 
     test('create rectangle', () =>
     {
-        const shape: IShape = new Shape({leftTopPoint: {top: 10, left: 10}, weight: 10, height: 10}, ShapeType.RECTANGLE);
+        const shape: IShape = new Shape({leftTopPoint: {top: 10, left: 10}, width: 10, height: 10}, ShapeType.RECTANGLE);
         const shapeFactory: IShapeFactory = new ShapeFactory();
 
         expect(shapeFactory.createShape(ShapeType.RECTANGLE)).toEqual(shape);
@@ -24,7 +24,7 @@ describe('test of shape factory', () =>
 
     test('create triangle', () =>
     {
-        const shape: IShape = new Shape({leftTopPoint: {top: 10, left: 10}, weight: 10, height: 10}, ShapeType.TRIANGLE);
+        const shape: IShape = new Shape({leftTopPoint: {top: 10, left: 10}, width: 10, height: 10}, ShapeType.TRIANGLE);
         const shapeFactory: IShapeFactory = new ShapeFactory();
 
         expect(shapeFactory.createShape(ShapeType.TRIANGLE)).toEqual(shape);

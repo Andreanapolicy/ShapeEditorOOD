@@ -7,6 +7,6 @@ export default class ShapeFactory implements IShapeFactory
 {
     public createShape(type: ShapeType): IShape
     {
-        return new Shape({leftTopPoint: {left: 10, top: 10}, weight: 10, height: 10}, type);
+        return new Shape({leftTopPoint: {left: 10, top: 10}, width: 10, height: 10}, type);
     }
 }

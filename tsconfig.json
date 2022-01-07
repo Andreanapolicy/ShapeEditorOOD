@@ -11,6 +11,8 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
+    "outFile": "./build/main.js",
+    "sourceRoot": "./src/",
     "noEmit": true
   },
   "include": [
