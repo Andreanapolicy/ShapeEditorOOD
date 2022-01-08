@@ -8,14 +8,16 @@ export default class ShapeView
     private readonly type: ShapeType;
     private readonly shapePresenter: ShapePresenter;
     private readonly shape: IShape;
+    private readonly id: string;
     private frame: Frame;
     private doOnChangeShapeCallback: Array<Function> = [];
 
-    constructor(frame: Frame, type: ShapeType, shape: IShape)
+    constructor(frame: Frame, type: ShapeType, shape: IShape, id: string)
     {
         this.frame = frame;
         this.type = type;
         this.shape = shape;
+        this.id = id;
         this.shapePresenter = new ShapePresenter(shape);
 
         this.shapePresenter.doOnChangeShape((newFrame: Frame) => this.notifyAllObservers(newFrame))
@@ -29,6 +31,11 @@ export default class ShapeView
     public getType(): ShapeType
     {
         return this.type;
+    }
+
+    public getID(): string
+    {
+        return this.id;
     }
 
     public changeFrame(newFrame: Frame): void

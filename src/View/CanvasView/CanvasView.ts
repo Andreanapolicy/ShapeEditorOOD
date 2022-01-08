@@ -43,7 +43,7 @@ export default class CanvasView
 
     private bindSelectShape(shape: ShapeView): void
     {
-        const shapeView: HTMLElement | null = document.getElementById((this.shapes.findIndex((shapeView: ShapeView) => shape === shapeView) ?? 0) as unknown as string);
+        const shapeView: HTMLElement | null = document.getElementById(shape.getID());
         if (shapeView === null)
         {
             return;
@@ -66,7 +66,7 @@ export default class CanvasView
     {
         const modelShape: IShape = this.canvasPresenter.addShape(type);
 
-        let newShape = new ShapeView(modelShape.getFrame(), modelShape.getType(), modelShape);
+        let newShape = new ShapeView(modelShape.getFrame(), modelShape.getType(), modelShape, this.shapes.length.toString());
         this.shapes.push(newShape);
         newShape.doOnChangeShape(() => this.changeShapeView(newShape));
         this.addShapeView(newShape);
@@ -81,7 +81,7 @@ export default class CanvasView
             this.deleteShapeView(shape);
         }
 
-        const shapeView: HTMLElement | null = document.getElementById((this.shapes.findIndex((shapeView: ShapeView) => shape === shapeView) ?? 0) as unknown as string);
+        const shapeView: HTMLElement | null = document.getElementById(shape.getID());
         if (shapeView === null)
         {
             return;
@@ -95,7 +95,7 @@ export default class CanvasView
         const newShape: HTMLElement = document.createElement('div');
         newShape.classList.add(this.elementClass);
         newShape.classList.add(CanvasView.getClassByType(shape.getType()));
-        newShape.id = (this.shapes.findIndex((shapeView: ShapeView) => shape === shapeView) ?? 0) as unknown as string;
+        newShape.id = shape.getID();
         document.getElementById(this.canvasID)?.appendChild(newShape);
 
         CanvasView.setFrameToView(newShape, shape.getFrame());
@@ -124,7 +124,7 @@ export default class CanvasView
 
     private deleteShapeView(shape: ShapeView): void
     {
-        const deletedShape: HTMLElement | null = document.getElementById((this.shapes.findIndex((shapeView: ShapeView) => shape === shapeView) ?? 0) as unknown as string);
+        const deletedShape: HTMLElement | null = document.getElementById(shape.getID());
 
         if (deletedShape === null)
         {

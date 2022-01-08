@@ -56,3 +56,18 @@
 {
     background: url('../images/ellipse.svg') center / contain no-repeat;
 }
+
+.corner
+{
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: black;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.selected
+{
+    outline: 2px dashed black;
+}
