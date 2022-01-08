@@ -1,5 +1,5 @@
-import { ISlide } from '../model/Slide/ISlide';
-import Slide from '../model/Slide/Slide';
+import { ISlide } from '../Model/Slide/ISlide';
+import Slide from '../Model/Slide/Slide';
 import View from '../View/View/View';
 
 export default class Application

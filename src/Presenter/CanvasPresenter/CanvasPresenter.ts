@@ -1,6 +1,6 @@
-import { ISlide } from '../../model/Slide/ISlide';
+import { ISlide } from '../../Model/Slide/ISlide';
 import { ShapeType } from '../../common/ShapeType';
-import { IShape } from '../../model/Shape/IShape';
+import { IShape } from '../../Model/Shape/IShape';
 
 export default class CanvasPresenter
 {

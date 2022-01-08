@@ -11,12 +11,14 @@
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "outFile": "./build/main.js",
-    "sourceRoot": "./src/",
+    "outDir": "./build/",
     "noEmit": true
   },
   "include": [
-    "src"
+    "./src/**/*"
+  ],
+  "exclude": [
+    "./node_modules/"
   ],
   "lib": [
     "es2015"

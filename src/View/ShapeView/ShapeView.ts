@@ -1,6 +1,6 @@
 import { Frame } from '../../common/Frame';
 import { ShapeType } from '../../common/ShapeType';
-import { IShape } from '../../model/Shape/IShape';
+import { IShape } from '../../Model/Shape/IShape';
 import ShapePresenter from '../../Presenter/ShapePresenter/ShapePresenter';
 
 export default class ShapeView
