@@ -4,6 +4,7 @@ import CanvasPresenter from '../../Presenter/CanvasPresenter/CanvasPresenter';
 import { ShapeType } from '../../common/ShapeType';
 import { IShape } from '../../Model/Shape/IShape';
 import { Frame } from '../../common/Frame';
+import SelectionView from '../SelectionView/SelectionView';
 
 export default class CanvasView
 {
@@ -11,12 +12,14 @@ export default class CanvasView
     private readonly elementClass: string = 'element';
     private readonly model: ISlide;
     private readonly canvasPresenter: CanvasPresenter;
+    private readonly selectionView: SelectionView;
     private shapes: Array<ShapeView> = [];
 
     constructor(model: ISlide)
     {
         this.model = model;
         this.canvasPresenter = new CanvasPresenter(model);
+        this.selectionView = new SelectionView();
         this.canvasPresenter.doOnChangeModel((shape: IShape) =>
         {
             const shapeView: ShapeView | undefined = this.shapes.find((shapeView: ShapeView) => shapeView.getShape() === shape);
@@ -28,13 +31,35 @@ export default class CanvasView
         });
 
         this.bindAddShape();
+        this.bindCanvasEvent();
     }
 
-    public bindAddShape(): void
+    private bindAddShape(): void
     {
         document.getElementById('addRectangle')?.addEventListener('click', () => this.addShape(ShapeType.RECTANGLE));
         document.getElementById('addTriangle')?.addEventListener('click', () => this.addShape(ShapeType.TRIANGLE));
         document.getElementById('addCircle')?.addEventListener('click', () => this.addShape(ShapeType.CIRCLE));
+    }
+
+    private bindSelectShape(shape: ShapeView): void
+    {
+        const shapeView: HTMLElement | null = document.getElementById((this.shapes.findIndex((shapeView: ShapeView) => shape === shapeView) ?? 0) as unknown as string);
+        if (shapeView === null)
+        {
+            return;
+        }
+
+        shapeView.addEventListener('click', () => this.selectionView.select(shape));
+    }
+
+    private bindCanvasEvent(): void
+    {
+        document.getElementById(this.canvasID)?.addEventListener('click', (event: Event) => {
+            if ((event.target as HTMLElement).id === this.canvasID)
+            {
+                this.selectionView.unselect();
+            }
+        });
     }
 
     private addShape(type: ShapeType): void
@@ -45,6 +70,8 @@ export default class CanvasView
         this.shapes.push(newShape);
         newShape.doOnChangeShape(() => this.changeShapeView(newShape));
         this.addShapeView(newShape);
+
+        this.bindSelectShape(newShape);
     }
 
     private changeShapeView(shape: ShapeView): void
@@ -65,7 +92,7 @@ export default class CanvasView
 
     private addShapeView(shape: ShapeView): void
     {
-        const newShape: HTMLElement = document.createElement("div");
+        const newShape: HTMLElement = document.createElement('div');
         newShape.classList.add(this.elementClass);
         newShape.classList.add(CanvasView.getClassByType(shape.getType()));
         newShape.id = (this.shapes.findIndex((shapeView: ShapeView) => shape === shapeView) ?? 0) as unknown as string;
