@@ -39,8 +39,7 @@ export default class CanvasView
 
     private addShape(type: ShapeType): void
     {
-        console.log(type);
-        const modelShape: IShape = this.canvasPresenter.addShape(ShapeType.RECTANGLE);
+        const modelShape: IShape = this.canvasPresenter.addShape(type);
 
         let newShape = new ShapeView(modelShape.getFrame(), modelShape.getType(), modelShape);
         this.shapes.push(newShape);
@@ -68,18 +67,32 @@ export default class CanvasView
     {
         const newShape: HTMLElement = document.createElement("div");
         newShape.classList.add(this.elementClass);
+        newShape.classList.add(CanvasView.getClassByType(shape.getType()));
         newShape.id = (this.shapes.findIndex((shapeView: ShapeView) => shape === shapeView) ?? 0) as unknown as string;
-        CanvasView.setFrameToView(newShape, shape.getFrame());
-
         document.getElementById(this.canvasID)?.appendChild(newShape);
+
+        CanvasView.setFrameToView(newShape, shape.getFrame());
     }
 
     private static setFrameToView(element: HTMLElement, frame: Frame): void
     {
-        element.style.width = frame.width as unknown as string;
-        element.style.height = frame.height as unknown as string;
-        element.style.top = frame.leftTopPoint.top as unknown as string;
-        element.style.left = frame.leftTopPoint.left as unknown as string;
+        element.style.width = frame.width + 'px';
+        element.style.height = frame.height + 'px';
+        element.style.top = frame.leftTopPoint.top + 'px';
+        element.style.left = frame.leftTopPoint.left + 'px';
+    }
+
+    private static getClassByType(type: ShapeType): string
+    {
+        switch (type)
+        {
+            case ShapeType.CIRCLE:
+                return 'circle';
+            case ShapeType.RECTANGLE:
+                return 'rectangle';
+            case ShapeType.TRIANGLE:
+                return 'triangle';
+        }
     }
 
     private deleteShapeView(shape: ShapeView): void

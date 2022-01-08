@@ -38,4 +38,21 @@
 .element
 {
     position: absolute;
+    width: 100px;
+    height: 100px;
+}
+
+.rectangle
+{
+    background: url('../images/rectangle.svg') center / contain no-repeat;
+}
+
+.triangle
+{
+    background: url('../images/triangle.svg') center / contain no-repeat;
+}
+
+.circle
+{
+    background: url('../images/ellipse.svg') center / contain no-repeat;
 }
