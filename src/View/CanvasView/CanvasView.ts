@@ -91,20 +91,19 @@ export default class CanvasView
         const shapeViewClone = shapeView.cloneNode(true);
         document.getElementById(this.canvasID)?.replaceChild(shapeViewClone, shapeView);
         this.bindSelectShape(shape);
-        this.selectionView.select(shape)
-
+        this.selectionView.select(shape);
         CanvasView.setFrameToView(shapeViewClone as HTMLElement, shape.getFrame());
+        shape.getContent().setFrame(shape.getFrame());
     }
 
     private addShapeView(shape: ShapeView): void
     {
         const newShape: HTMLElement = document.createElement('div');
         newShape.classList.add(this.elementClass);
-        newShape.classList.add(CanvasView.getClassByType(shape.getType()));
         newShape.id = shape.getID();
+        newShape.appendChild(shape.getContent().getContent());
         document.getElementById(this.canvasID)?.appendChild(newShape);
-
-        CanvasView.setFrameToView(newShape, shape.getFrame());
+        shape.getContent().setFrame(shape.getFrame());
     }
 
     private static setFrameToView(element: HTMLElement, frame: Frame): void
@@ -113,19 +112,6 @@ export default class CanvasView
         element.style.height = frame.height + 'px';
         element.style.top = frame.leftTopPoint.top + 'px';
         element.style.left = frame.leftTopPoint.left + 'px';
-    }
-
-    private static getClassByType(type: ShapeType): string
-    {
-        switch (type)
-        {
-            case ShapeType.CIRCLE:
-                return 'circle';
-            case ShapeType.RECTANGLE:
-                return 'rectangle';
-            case ShapeType.TRIANGLE:
-                return 'triangle';
-        }
     }
 
     private deleteShapeView(shape: ShapeView): void

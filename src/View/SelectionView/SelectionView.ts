@@ -80,8 +80,12 @@ export default class SelectionView
             return;
         }
 
+        const corners = document.getElementsByClassName(this.cornerClass);
+        while (corners.length !== 0)
+        {
+            corners.item(corners.length - 1)?.parentNode?.removeChild(corners[corners.length - 1]);
+        }
         shapeView.classList.remove(this.selectedClass);
-        shapeView.innerHTML = '';
     }
 
     private setCornerPosition(corner: HTMLElement, cornerID: string): void

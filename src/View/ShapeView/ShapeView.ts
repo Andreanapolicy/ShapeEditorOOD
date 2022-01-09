@@ -2,6 +2,8 @@ import { Frame } from '../../common/Frame';
 import { ShapeType } from '../../common/ShapeType';
 import { IShape } from '../../Model/Shape/IShape';
 import ShapePresenter from '../../Presenter/ShapePresenter/ShapePresenter';
+import ShapeContent from '../ShapeContent/ShapeContent';
+import ShapeContentFactory from '../ShapeContentFactory/ShapeContentFactory';
 
 export default class ShapeView
 {
@@ -9,6 +11,7 @@ export default class ShapeView
     private readonly shapePresenter: ShapePresenter;
     private readonly shape: IShape;
     private readonly id: string;
+    private readonly shapeContent: ShapeContent;
     private frame: Frame;
     private doOnChangeShapeCallback: Array<Function> = [];
 
@@ -18,6 +21,7 @@ export default class ShapeView
         this.type = type;
         this.shape = shape;
         this.id = id;
+        this.shapeContent = ShapeContentFactory.createShapeContent(type, id);
         this.shapePresenter = new ShapePresenter(shape);
 
         this.shapePresenter.doOnChangeShape((newFrame: Frame) => this.notifyAllObservers(newFrame))
@@ -36,6 +40,11 @@ export default class ShapeView
     public getID(): string
     {
         return this.id;
+    }
+
+    public getContent(): ShapeContent
+    {
+        return this.shapeContent;
     }
 
     public setFrame(newFrame: Frame): void
