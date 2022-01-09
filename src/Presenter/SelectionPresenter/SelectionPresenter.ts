@@ -2,10 +2,13 @@ import ShapeView from '../../View/ShapeView/ShapeView';
 import DragAndDropUseCase from '../../UseCase/DragAndDropUseCase/DragAndDropUseCase';
 import { Frame } from '../../common/Frame';
 import { Point } from '../../common/Point';
+import ResizeUseCase from '../../UseCase/ResizeUseCase/ResizeUseCase';
+import { Corners } from '../../common/CornersIDs';
 
 export default class SelectionPresenter
 {
     private readonly dragAndDropUseCase: DragAndDropUseCase;
+    private readonly resizeUseCase: ResizeUseCase;
     private doOnMoveShapeCallbacks: Array<Function> = [];
     private doOnResizeShapeCallbacks: Array<Function> = [];
     private doOnChangeFrameCallbacks: Array<Function> = [];
@@ -14,14 +17,21 @@ export default class SelectionPresenter
     constructor(scope: Frame)
     {
         this.dragAndDropUseCase = new DragAndDropUseCase(scope);
+        this.resizeUseCase = new ResizeUseCase(scope);
 
         this.dragAndDropUseCase.doOnMove((delta: Point) => this.callbackOnMoveShape(delta));
         this.dragAndDropUseCase.doOnMouseUp((delta: Point) => this.callbackOnMouseUpShape(delta));
+
+        this.resizeUseCase.doOnChangeSize((newFrame: Frame) =>
+            this.doOnResizeShapeCallbacks.map((callback: Function) => callback(newFrame)));
+        this.resizeUseCase.doOnResize((newFrame: Frame) =>
+            this.doOnChangeFrameCallbacks.map((callback: Function) => callback(newFrame)));
     }
 
-    public cornerMouseDown(corner: HTMLElement, event: MouseEvent): void
+    public cornerMouseDown(shape: ShapeView, corner: HTMLElement, event: MouseEvent): void
     {
-
+        this.shape = shape;
+        this.resizeUseCase.mouseDown(corner, event, corner.id as Corners, shape.getFrame());
     }
 
     public shapeMouseDown(shape: ShapeView, event: MouseEvent): void

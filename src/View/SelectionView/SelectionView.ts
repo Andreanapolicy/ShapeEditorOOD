@@ -16,6 +16,7 @@ export default class SelectionView
         this.selectionPresenter = new SelectionPresenter(scope);
 
         this.selectionPresenter.doOnMoveShape((newFrame: Frame) => this.shape?.setFrame(newFrame));
+        this.selectionPresenter.doOnResizeShape((newFrame: Frame) => this.shape?.setFrame(newFrame));
         this.selectionPresenter.doOnChangeFrame((newFrame: Frame) => this.shape?.changeFrame(newFrame));
     }
 
@@ -108,10 +109,16 @@ export default class SelectionView
 
     private bindCorners(): void
     {
+        if (this.shape === null || this.shape === undefined)
+        {
+            return;
+        }
+
         this.cornersIDs.map((cornerID: string) =>
             {
                 const corner = document.getElementById(cornerID);
-                corner?.addEventListener('mousedown', (event: MouseEvent) => this.selectionPresenter.cornerMouseDown(corner as HTMLElement, event));
+                corner?.addEventListener('mousedown', (event: MouseEvent) =>
+                    this.selectionPresenter.cornerMouseDown(this.shape as ShapeView, corner as HTMLElement, event,));
             }
         );
     }
@@ -123,7 +130,7 @@ export default class SelectionView
             return;
         }
 
-        document.getElementById(this.shape.getID())?.addEventListener('mousedown', (event) =>
+        document.getElementById(this.shape.getID())?.addEventListener('mousedown', (event: MouseEvent) =>
             this.selectionPresenter.shapeMouseDown(this.shape as ShapeView, event));
     }
 }
