@@ -10,7 +10,7 @@ export default class ShapePresenter
     {
         this.shape = shape;
         shape.doOnChangeFrame(() => this.notifyAllObservers());
-        shape.doOnDelete(() => this.notifyAllObservers());
+        shape.doOnDelete(() => this.notifyAllObservers( {leftTopPoint: {top: 0, left: 0}, width: 0, height: 0}));
     }
 
     public doOnChangeShape(callback: Function): void
@@ -23,8 +23,8 @@ export default class ShapePresenter
         this.shape.setFrame(newFrame);
     }
 
-    private notifyAllObservers(): void
+    private notifyAllObservers(frame: Frame = this.shape.getFrame()): void
     {
-        this.doOnChangeShapeCallbacks.map((callback: Function) => callback(this.shape.getFrame()));
+        this.doOnChangeShapeCallbacks.map((callback: Function) => callback(frame));
     }
 }

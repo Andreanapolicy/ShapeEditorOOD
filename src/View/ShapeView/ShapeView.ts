@@ -24,7 +24,11 @@ export default class ShapeView
         this.shapeContent = ShapeContentFactory.createShapeContent(type, id);
         this.shapePresenter = new ShapePresenter(shape);
 
-        this.shapePresenter.doOnChangeShape((newFrame: Frame) => this.notifyAllObservers(newFrame))
+        this.shapePresenter.doOnChangeShape((newFrame: Frame) =>
+        {
+            this.frame = newFrame;
+            this.notifyAllObservers();
+        })
     }
 
     public getFrame(): Frame
@@ -71,8 +75,8 @@ export default class ShapeView
         this.doOnChangeShapeCallback.push(callback);
     }
 
-    private notifyAllObservers(newFrame: Frame): void
+    private notifyAllObservers(): void
     {
-        this.doOnChangeShapeCallback.map((callback: Function) => callback(newFrame));
+        this.doOnChangeShapeCallback.map((callback: Function) => callback());
     }
 }

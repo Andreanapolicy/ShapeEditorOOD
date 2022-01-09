@@ -1,6 +1,7 @@
 import { ISlide } from '../../Model/Slide/ISlide';
 import { ShapeType } from '../../common/ShapeType';
 import { IShape } from '../../Model/Shape/IShape';
+import ShapeView from '../../View/ShapeView/ShapeView';
 
 export default class CanvasPresenter
 {
@@ -16,6 +17,11 @@ export default class CanvasPresenter
     public addShape(type: ShapeType): IShape
     {
         return this.model.createShape(type);
+    }
+
+    public deleteShape(shape: ShapeView): void
+    {
+        this.model.removeShape(shape.getShape());
     }
 
     public doOnChangeModel(callback: Function): void

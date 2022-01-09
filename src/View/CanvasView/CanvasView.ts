@@ -40,6 +40,17 @@ export default class CanvasView
         document.getElementById('addRectangle')?.addEventListener('click', () => this.addShape(ShapeType.RECTANGLE));
         document.getElementById('addTriangle')?.addEventListener('click', () => this.addShape(ShapeType.TRIANGLE));
         document.getElementById('addCircle')?.addEventListener('click', () => this.addShape(ShapeType.CIRCLE));
+        document.getElementById('delete')?.addEventListener('click', () =>
+        {
+            const selectedShape: ShapeView | null = this.selectionView.getSelectedShape();
+
+            if (selectedShape === null)
+            {
+                return;
+            }
+
+            this.canvasPresenter.deleteShape(selectedShape);
+        });
     }
 
     private bindSelectShape(shape: ShapeView): void

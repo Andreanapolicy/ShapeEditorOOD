@@ -30,6 +30,11 @@
     cursor: pointer;
 }
 
+.button_red
+{
+    background-color: #ff6464;
+}
+
 .button__wrapper
 {
     display: flex;
