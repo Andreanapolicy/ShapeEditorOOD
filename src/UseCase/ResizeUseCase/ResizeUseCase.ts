@@ -48,31 +48,33 @@ export default class ResizeUseCase
 
     private getResultFrame(delta: Point): Frame
     {
+        let newFrame: Frame = this.shapeFrame;
+
         switch (this.cornerType)
         {
             case Corners.topLeft:
-                this.shapeFrame = {
+                newFrame = {
                     leftTopPoint: {top: this.shapeFrame.leftTopPoint.top + delta.top, left: this.shapeFrame.leftTopPoint.left + delta.left},
                     width: this.shapeFrame.width - delta.left,
                     height: this.shapeFrame.height - delta.top
                 };
                 break;
             case Corners.topRight:
-                this.shapeFrame = {
+                newFrame = {
                     leftTopPoint: {top: this.shapeFrame.leftTopPoint.top + delta.top, left: this.shapeFrame.leftTopPoint.left},
                     width: this.shapeFrame.width + delta.left,
                     height: this.shapeFrame.height - delta.top
                 };
                 break;
             case Corners.bottomRight:
-                this.shapeFrame = {
+                newFrame = {
                     leftTopPoint: {top: this.shapeFrame.leftTopPoint.top, left: this.shapeFrame.leftTopPoint.left},
                     width: this.shapeFrame.width + delta.left,
                     height: this.shapeFrame.height + delta.top
                 };
                 break;
             case Corners.bottomLeft:
-                this.shapeFrame = {
+                newFrame = {
                     leftTopPoint: {top: this.shapeFrame.leftTopPoint.top, left: this.shapeFrame.leftTopPoint.left + delta.left},
                     width: this.shapeFrame.width - delta.left,
                     height: this.shapeFrame.height + delta.top
@@ -80,14 +82,19 @@ export default class ResizeUseCase
                 break;
         }
 
-        if (this.shapeFrame.width < 10)
+        if (newFrame.width < 15)
         {
-            this.shapeFrame.width = 10;
+            this.shapeFrame.width = 15;
         }
 
-        if (this.shapeFrame.height < 10)
+        if (newFrame.height < 15)
         {
-            this.shapeFrame.height = 10;
+            this.shapeFrame.height = 15;
+        }
+
+        if (newFrame.height >= 15 && newFrame.width >= 15)
+        {
+            this.shapeFrame = newFrame;
         }
 
         return this.shapeFrame;
