@@ -18,6 +18,7 @@
     height: 768px;
     border: 1px solid black;
     position: relative;
+    overflow: hidden;
 }
 
 .button

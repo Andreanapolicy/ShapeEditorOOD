@@ -13,13 +13,14 @@ export default class CanvasView
     private readonly model: ISlide;
     private readonly canvasPresenter: CanvasPresenter;
     private readonly selectionView: SelectionView;
+    private readonly scope: Frame = {leftTopPoint: {top: 58, left: 272}, width: 1376, height: 768};
     private shapes: Array<ShapeView> = [];
 
     constructor(model: ISlide)
     {
         this.model = model;
         this.canvasPresenter = new CanvasPresenter(model);
-        this.selectionView = new SelectionView();
+        this.selectionView = new SelectionView(this.scope);
         this.canvasPresenter.doOnChangeModel((shape: IShape) =>
         {
             const shapeView: ShapeView | undefined = this.shapes.find((shapeView: ShapeView) => shapeView.getShape() === shape);
@@ -87,7 +88,12 @@ export default class CanvasView
             return;
         }
 
-        CanvasView.setFrameToView(shapeView, shape.getFrame());
+        const shapeViewClone = shapeView.cloneNode(true);
+        document.getElementById(this.canvasID)?.replaceChild(shapeViewClone, shapeView);
+        this.bindSelectShape(shape);
+        this.selectionView.select(shape)
+
+        CanvasView.setFrameToView(shapeViewClone as HTMLElement, shape.getFrame());
     }
 
     private addShapeView(shape: ShapeView): void

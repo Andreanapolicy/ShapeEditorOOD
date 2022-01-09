@@ -38,6 +38,12 @@ export default class ShapeView
         return this.id;
     }
 
+    public setFrame(newFrame: Frame): void
+    {
+        this.frame = newFrame;
+        this.doOnChangeShapeCallback.map((callback: Function) => callback());
+    }
+
     public changeFrame(newFrame: Frame): void
     {
         this.frame = newFrame;
