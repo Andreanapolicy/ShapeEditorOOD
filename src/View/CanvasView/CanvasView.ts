@@ -50,7 +50,7 @@ export default class CanvasView
             return;
         }
 
-        shapeView.addEventListener('click', () => this.selectionView.select(shape));
+        shapeView.addEventListener('mousedown', () => this.selectionView.select(shape));
     }
 
     private bindCanvasEvent(): void
