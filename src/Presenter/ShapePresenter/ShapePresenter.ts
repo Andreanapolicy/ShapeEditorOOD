@@ -1,5 +1,5 @@
 import { IShape } from '../../Model/Shape/IShape';
-import { Frame } from '../../common/Frame';
+import { Frame } from '../../Сommon/Frame';
 
 export default class ShapePresenter
 {

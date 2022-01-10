@@ -1,4 +1,4 @@
-import { ShapeType } from '../../common/ShapeType';
+import { ShapeType } from '../../Model/Type/ShapeType';
 import ShapeContent from '../ShapeContent/ShapeContent';
 import Rectangle from '../ShapeContent/Rectangle';
 import Circle from '../ShapeContent/Circle';

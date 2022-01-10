@@ -1,5 +1,5 @@
 import { IShape } from '../Shape/IShape';
-import { ShapeType } from '../../common/ShapeType';
+import { ShapeType } from '../Type/ShapeType';
 
 export interface IShapeFactory
 {

@@ -1,4 +1,4 @@
-import { Frame } from '../../common/Frame';
+import { Frame } from '../../Сommon/Frame';
 
 export default class ShapeContent
 {

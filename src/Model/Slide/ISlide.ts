@@ -1,4 +1,4 @@
-import { ShapeType } from '../../common/ShapeType';
+import { ShapeType } from '../Type/ShapeType';
 import { IShape } from '../Shape/IShape';
 
 export interface ISlide

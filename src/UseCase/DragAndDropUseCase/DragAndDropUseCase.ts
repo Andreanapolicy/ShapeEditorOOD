@@ -1,6 +1,6 @@
-import { Frame } from '../../common/Frame';
-import { Point } from '../../common/Point';
-import { DragAndDropState } from '../../common/DragAndDropState';
+import { Frame } from '../../Сommon/Frame';
+import { Point } from '../../Сommon/Point';
+import { DragAndDropState } from '../Type/DragAndDropState';
 
 export default class DragAndDropUseCase
 {

@@ -1,9 +1,9 @@
 import ShapeView from '../../View/ShapeView/ShapeView';
 import DragAndDropUseCase from '../../UseCase/DragAndDropUseCase/DragAndDropUseCase';
-import { Frame } from '../../common/Frame';
-import { Point } from '../../common/Point';
+import { Frame } from '../../Сommon/Frame';
+import { Point } from '../../Сommon/Point';
 import ResizeUseCase from '../../UseCase/ResizeUseCase/ResizeUseCase';
-import { Corners } from '../../common/CornersIDs';
+import { Corners } from '../../View/Type/CornersIDs';
 
 export default class SelectionPresenter
 {

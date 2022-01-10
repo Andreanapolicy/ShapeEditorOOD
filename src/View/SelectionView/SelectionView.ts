@@ -1,7 +1,7 @@
 import ShapeView from '../ShapeView/ShapeView';
-import { Corners, cornersIDs } from '../../common/CornersIDs';
+import { Corners, cornersIDs } from '../Type/CornersIDs';
 import SelectionPresenter from '../../Presenter/SelectionPresenter/SelectionPresenter';
-import { Frame } from '../../common/Frame';
+import { Frame } from '../../Сommon/Frame';
 
 export default class SelectionView
 {

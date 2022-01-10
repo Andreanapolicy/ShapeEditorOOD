@@ -1,6 +1,6 @@
 import { IShape } from './IShape';
 import Shape from './Shape';
-import { ShapeType } from '../../common/ShapeType';
+import { ShapeType } from '../Type/ShapeType';
 
 describe('test of shape', () =>
 {

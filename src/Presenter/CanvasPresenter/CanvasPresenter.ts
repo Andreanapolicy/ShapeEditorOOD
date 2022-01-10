@@ -1,5 +1,5 @@
 import { ISlide } from '../../Model/Slide/ISlide';
-import { ShapeType } from '../../common/ShapeType';
+import { ShapeType } from '../../Model/Type/ShapeType';
 import { IShape } from '../../Model/Shape/IShape';
 import ShapeView from '../../View/ShapeView/ShapeView';
 

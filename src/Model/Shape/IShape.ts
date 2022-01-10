@@ -1,5 +1,5 @@
-import { Frame } from '../../common/Frame';
-import { ShapeType } from '../../common/ShapeType';
+import { Frame } from '../../Сommon/Frame';
+import { ShapeType } from '../Type/ShapeType';
 
 export interface IShape
 {

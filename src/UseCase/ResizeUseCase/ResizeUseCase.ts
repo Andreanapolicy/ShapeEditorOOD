@@ -1,7 +1,7 @@
 import DragAndDropUseCase from '../DragAndDropUseCase/DragAndDropUseCase';
-import { Frame } from '../../common/Frame';
-import { Point } from '../../common/Point';
-import { Corners } from '../../common/CornersIDs';
+import { Frame } from '../../Сommon/Frame';
+import { Point } from '../../Сommon/Point';
+import { Corners } from '../../View/Type/CornersIDs';
 
 export default class ResizeUseCase
 {

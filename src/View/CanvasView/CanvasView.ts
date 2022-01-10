@@ -1,9 +1,9 @@
 import { ISlide } from '../../Model/Slide/ISlide';
 import ShapeView from '../ShapeView/ShapeView';
 import CanvasPresenter from '../../Presenter/CanvasPresenter/CanvasPresenter';
-import { ShapeType } from '../../common/ShapeType';
+import { ShapeType } from '../../Model/Type/ShapeType';
 import { IShape } from '../../Model/Shape/IShape';
-import { Frame } from '../../common/Frame';
+import { Frame } from '../../Сommon/Frame';
 import SelectionView from '../SelectionView/SelectionView';
 
 export default class CanvasView
