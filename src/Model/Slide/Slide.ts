@@ -24,6 +24,11 @@ export default class Slide implements ISlide
         return newShape;
     }
 
+    public getShapesCount(): number
+    {
+        return this.shapes.length;
+    }
+
     public doOnAddShape(callback: Function): void
     {
         this.doOnAddShapeCallbacks.push(callback);

@@ -1,36 +1,37 @@
 import { IShape } from './IShape';
 import Shape from './Shape';
 import { ShapeType } from '../Type/ShapeType';
+import { commonFrame } from '../../Сommon/Frame';
 
 describe('test of shape', () =>
 {
     test('create circle', () =>
     {
-        const shape: IShape = new Shape({leftTopPoint: {top: 10, left: 10}, width: 10, height: 10}, ShapeType.CIRCLE);
+        const shape: IShape = new Shape(commonFrame, ShapeType.CIRCLE);
 
-        expect(shape.getFrame()).toEqual({leftTopPoint: {top: 10, left: 10}, width: 10, height: 10});
+        expect(shape.getFrame()).toEqual(commonFrame);
         expect(shape.getType()).toEqual(ShapeType.CIRCLE);
     });
 
     test('create rectangle', () =>
     {
-        const shape: IShape = new Shape({leftTopPoint: {top: 10, left: 10}, width: 10, height: 10}, ShapeType.RECTANGLE);
+        const shape: IShape = new Shape(commonFrame, ShapeType.RECTANGLE);
 
-        expect(shape.getFrame()).toEqual({leftTopPoint: {top: 10, left: 10}, width: 10, height: 10});
+        expect(shape.getFrame()).toEqual(commonFrame);
         expect(shape.getType()).toEqual(ShapeType.RECTANGLE);
     });
 
     test('create triangle', () =>
     {
-        const shape: IShape = new Shape({leftTopPoint: {top: 10, left: 10}, width: 10, height: 10}, ShapeType.TRIANGLE);
+        const shape: IShape = new Shape(commonFrame, ShapeType.TRIANGLE);
 
-        expect(shape.getFrame()).toEqual({leftTopPoint: {top: 10, left: 10}, width: 10, height: 10});
+        expect(shape.getFrame()).toEqual(commonFrame);
         expect(shape.getType()).toEqual(ShapeType.TRIANGLE);
     });
 
     test('check notification', () =>
     {
-        const shape: IShape = new Shape({leftTopPoint: {top: 10, left: 10}, width: 10, height: 10}, ShapeType.TRIANGLE);
+        const shape: IShape = new Shape(commonFrame, ShapeType.TRIANGLE);
         let isFrameChanged: boolean = false;
         let isDeleted: boolean = false;
 

@@ -3,6 +3,7 @@ import { ISlide } from './ISlide';
 import Slide from './Slide';
 import Shape from '../Shape/Shape';
 import { IShape } from '../Shape/IShape';
+import { commonFrame } from '../../Сommon/Frame';
 
 describe('test of slide', () =>
 {
@@ -15,7 +16,7 @@ describe('test of slide', () =>
 
     test('delete shape from empty slide', () =>
     {
-        const shape: IShape = new Shape({leftTopPoint: {top: 10, left: 10}, width: 10, height: 10}, ShapeType.CIRCLE);
+        const shape: IShape = new Shape(commonFrame, ShapeType.CIRCLE);
         const slide: ISlide = new Slide();
         let isDeleted: boolean = false;
         shape.doOnDelete(() => isDeleted = true);
@@ -26,13 +27,18 @@ describe('test of slide', () =>
 
     test('add item', () =>
     {
-        const shape: IShape = new Shape({leftTopPoint: {top: 10, left: 10}, width: 10, height: 10}, ShapeType.TRIANGLE);
+        const shape: IShape = new Shape(commonFrame, ShapeType.TRIANGLE);
         const slide: ISlide = new Slide();
         let isDeleted: boolean = false;
         slide.createShape(ShapeType.TRIANGLE);
+        slide.createShape(ShapeType.CIRCLE);
 
+        expect(slide.getShapesCount()).toEqual(2);
         expect(slide.getShapeByIndex(0)?.getFrame()).toEqual(shape.getFrame());
         expect(slide.getShapeByIndex(0)?.getType()).toEqual(shape.getType());
+
+        expect(slide.getShapeByIndex(slide.getShapesCount() - 1)?.getFrame()).toEqual(shape.getFrame());
+        expect(slide.getShapeByIndex(slide.getShapesCount() - 1)?.getType()).toEqual(ShapeType.CIRCLE);
 
         slide.getShapeByIndex(0)?.doOnDelete(() => isDeleted = true);
         slide.removeShapeByIndex(0);
