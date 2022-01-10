@@ -54,13 +54,13 @@ export default class ShapeView
     public setFrame(newFrame: Frame): void
     {
         this.frame = newFrame;
-        this.doOnChangeShapeCallback.map((callback: Function) => callback());
+        this.doOnChangeShapeCallback.forEach((callback: Function) => callback());
     }
 
     public changeFrame(newFrame: Frame): void
     {
         this.frame = newFrame;
-        this.doOnChangeShapeCallback.map((callback: Function) => callback());
+        this.doOnChangeShapeCallback.forEach((callback: Function) => callback());
 
         this.shapePresenter.changeModelFrame(newFrame);
     }
@@ -77,6 +77,6 @@ export default class ShapeView
 
     private notifyAllObservers(): void
     {
-        this.doOnChangeShapeCallback.map((callback: Function) => callback());
+        this.doOnChangeShapeCallback.forEach((callback: Function) => callback());
     }
 }

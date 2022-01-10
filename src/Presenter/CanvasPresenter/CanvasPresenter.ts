@@ -31,6 +31,6 @@ export default class CanvasPresenter
 
     private notifyAllObservers(): void
     {
-        this.doOnChangeModelCallbacks.map((callback: Function) => callback());
+        this.doOnChangeModelCallbacks.forEach((callback: Function) => callback());
     }
 }

@@ -23,21 +23,21 @@ export default class SelectionPresenter
         this.dragAndDropUseCase.doOnMouseUp((delta: Point) => this.callbackOnMouseUpShape(delta));
 
         this.resizeUseCase.doOnChangeSize((newFrame: Frame) =>
-            this.doOnResizeShapeCallbacks.map((callback: Function) => callback(newFrame)));
+            this.doOnResizeShapeCallbacks.forEach((callback: Function) => callback(newFrame)));
         this.resizeUseCase.doOnResize((newFrame: Frame) =>
-            this.doOnChangeFrameCallbacks.map((callback: Function) => callback(newFrame)));
+            this.doOnChangeFrameCallbacks.forEach((callback: Function) => callback(newFrame)));
     }
 
     public cornerMouseDown(shape: ShapeView, corner: HTMLElement, event: MouseEvent): void
     {
         this.shape = shape;
-        this.resizeUseCase.mouseDown(corner, event, corner.id as Corners, shape.getFrame());
+        this.resizeUseCase.mouseDown(event, corner.id as Corners, shape.getFrame());
     }
 
     public shapeMouseDown(shape: ShapeView, event: MouseEvent): void
     {
         this.shape = shape;
-        this.dragAndDropUseCase.mouseDown(document.getElementById(shape.getID()) as HTMLElement, event);
+        this.dragAndDropUseCase.mouseDown(event);
     }
 
     public doOnMoveShape(callback: Function): void
@@ -74,7 +74,7 @@ export default class SelectionPresenter
             return;
         }
 
-        this.doOnMoveShapeCallbacks.map((callback: Function) => callback(newFrame))
+        this.doOnMoveShapeCallbacks.forEach((callback: Function) => callback(newFrame))
     }
 
     private callbackOnMouseUpShape(delta: Point): void
@@ -85,6 +85,6 @@ export default class SelectionPresenter
             return;
         }
 
-        this.doOnChangeFrameCallbacks.map((callback: Function) => callback(newFrame))
+        this.doOnChangeFrameCallbacks.forEach((callback: Function) => callback(newFrame))
     }
 }

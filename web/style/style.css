@@ -61,4 +61,5 @@
 .selected
 {
     outline: 2px dashed black;
+    z-index: 1;
 }

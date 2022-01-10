@@ -19,11 +19,11 @@ export default class ResizeUseCase
         this.dragAndDropUseCase.doOnMouseUp((delta: Point) => this.callbackOnMouseUpCorner(delta));
     }
 
-    public mouseDown(element: HTMLElement, event: MouseEvent, type: Corners, shapeFrame: Frame): void
+    public mouseDown(event: MouseEvent, type: Corners, shapeFrame: Frame): void
     {
         this.shapeFrame = shapeFrame;
         this.cornerType = type;
-        this.dragAndDropUseCase.mouseDown(element, event);
+        this.dragAndDropUseCase.mouseDown(event);
     }
 
     public doOnChangeSize(callback: Function): void
@@ -38,12 +38,12 @@ export default class ResizeUseCase
 
     private callbackOnMoveCorner(delta: Point): void
     {
-        this.doOnChangeSizeCallbacks.map((callback: Function) => callback(this.getResultFrame(delta)))
+        this.doOnChangeSizeCallbacks.forEach((callback: Function) => callback(this.getResultFrame(delta)))
     }
 
     private callbackOnMouseUpCorner(delta: Point): void
     {
-        this.doOnResizeCallbacks.map((callback: Function) => callback(this.getResultFrame(delta)))
+        this.doOnResizeCallbacks.forEach((callback: Function) => callback(this.getResultFrame(delta)))
     }
 
     private getResultFrame(delta: Point): Frame

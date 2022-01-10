@@ -15,7 +15,7 @@ export default class DragAndDropUseCase
         this.scope = scope;
     }
 
-    public mouseDown(element: HTMLElement, event: MouseEvent): void
+    public mouseDown(event: MouseEvent): void
     {
         this.state = DragAndDropState.move;
         this.currentCursorPosition = {top: event.pageY, left: event.pageX};
@@ -34,7 +34,7 @@ export default class DragAndDropUseCase
             const delta: Point = {top: this.currentCursorPosition.top - event.pageY, left: this.currentCursorPosition.left - event.pageX};
             this.currentCursorPosition = {top: this.currentCursorPosition.top + delta.top, left: this.currentCursorPosition.left + delta.left};
 
-            this.doOnMouseUpCallbacks.map((callback: Function) => callback(delta));
+            this.doOnMouseUpCallbacks.forEach((callback: Function) => callback(delta));
         });
     }
 
@@ -66,6 +66,6 @@ export default class DragAndDropUseCase
 
         this.currentCursorPosition = {top: this.currentCursorPosition.top + delta.top, left: this.currentCursorPosition.left + delta.left};
 
-        this.doOnMoveCallbacks.map((callback: Function) => callback(delta));
+        this.doOnMoveCallbacks.forEach((callback: Function) => callback(delta));
     }
 }

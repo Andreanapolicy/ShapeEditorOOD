@@ -56,7 +56,7 @@ export default class SelectionView
         }
 
         shapeView.classList.add(this.selectedClass);
-        this.cornersIDs.map((cornerID: string) => {
+        this.cornersIDs.forEach((cornerID: string) => {
             const newCorner: HTMLElement = document.createElement('div');
             newCorner.classList.add(this.cornerClass);
             newCorner.classList.add(cornerID.toLowerCase());
@@ -118,7 +118,7 @@ export default class SelectionView
             return;
         }
 
-        this.cornersIDs.map((cornerID: string) =>
+        this.cornersIDs.forEach((cornerID: string) =>
             {
                 const corner = document.getElementById(cornerID);
                 corner?.addEventListener('mousedown', (event: MouseEvent) =>

@@ -25,6 +25,6 @@ export default class ShapePresenter
 
     private notifyAllObservers(frame: Frame = this.shape.getFrame()): void
     {
-        this.doOnChangeShapeCallbacks.map((callback: Function) => callback(frame));
+        this.doOnChangeShapeCallbacks.forEach((callback: Function) => callback(frame));
     }
 }

@@ -29,12 +29,12 @@ export default class Shape implements IShape
     public setFrame(frame: Frame): void
     {
         this.frame = frame;
-        this.doOnChangeFrameCallbacks.map((callback: Function) => callback());
+        this.doOnChangeFrameCallbacks.forEach((callback: Function) => callback());
     }
 
     public markDeleted(): void
     {
-        this.doOnDeleteCallbacks.map((callback: Function) => callback());
+        this.doOnDeleteCallbacks.forEach((callback: Function) => callback());
     }
 
     public doOnChangeFrame(callback: Function): void
