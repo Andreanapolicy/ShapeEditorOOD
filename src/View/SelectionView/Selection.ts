@@ -4,6 +4,8 @@ import { Point } from '../../Сommon/Point';
 import DragAndDropUseCaseNew from '../../UseCase/DragAndDropUseCase/DragAndDropUseCaseNew';
 import { Scope } from '../Type/Scope';
 import { Frame } from '../../Сommon/Frame';
+import ResizeUseCaseNew from '../../UseCase/ResizeUseCase/ResizeUseCaseNew';
+import { Corners } from '../Type/CornersIDs';
 
 export default class Selection
 {
@@ -19,7 +21,7 @@ export default class Selection
                 return;
             }
 
-            const newFrame: Frame | null = DragAndDropUseCaseNew.getResultFrame(delta, this.shapePresenter.getShapeModel().getFrame(), Scope);
+            const newFrame: Frame | null = DragAndDropUseCaseNew.checkForScreenCapacity(this.shapePresenter.getShapeModel().getFrame(), Scope, delta);
 
             if (newFrame === null)
             {
@@ -33,7 +35,37 @@ export default class Selection
             {
                 return;
             }
-            const newFrame: Frame | null = DragAndDropUseCaseNew.getResultFrame(delta, this.shapePresenter.getShapeModel().getFrame(), Scope);
+            const newFrame: Frame | null = DragAndDropUseCaseNew.checkForScreenCapacity(this.shapePresenter.getShapeModel().getFrame(), Scope, delta);
+
+            if (newFrame === null)
+            {
+                this.shapePresenter.setNewFrameToModel(this.shapePresenter.getShapeView().getFrame());
+                return;
+            }
+
+            this.shapePresenter.setNewFrameToModel(newFrame);
+        });
+
+        this.selectionView.doOnResizeWhileMovingShape((delta: Point, cornerType: Corners) => {
+            if (this.shapePresenter === null)
+            {
+                return;
+            }
+            const newFrame: Frame | null = ResizeUseCaseNew.getResultFrame(delta, this.shapePresenter.getShapeModel().getFrame(), cornerType);
+
+            if (newFrame === null)
+            {
+                return;
+            }
+            this.shapePresenter.setNewFrameToView(newFrame);
+        });
+
+        this.selectionView.doOnResizeWhileMouseUpShape((delta: Point, cornerType: Corners) => {
+            if (this.shapePresenter === null)
+            {
+                return;
+            }
+            const newFrame: Frame | null = ResizeUseCaseNew.getResultFrame(delta, this.shapePresenter.getShapeModel().getFrame(), cornerType);
 
             if (newFrame === null)
             {

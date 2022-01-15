@@ -3,11 +3,13 @@ import { Point } from '../../Сommon/Point';
 
 export default class DragAndDropUseCaseNew
 {
-    public static getResultFrame(delta: Point, frame: Frame, scope: Frame): Frame | null
+    private static defaultIndent: number = 10;
+
+    public static checkForScreenCapacity(frame: Frame, scope: Frame, delta: Point = {top: 0, left: 0}): Frame | null
     {
-        if (!(frame.leftTopPoint.left + delta.left < scope.width - frame.width)
+        if (!(frame.leftTopPoint.left + delta.left < scope.width - DragAndDropUseCaseNew.defaultIndent)
             || !(frame.leftTopPoint.left + delta.left > 0)
-            || !(frame.leftTopPoint.top + delta.top < scope.height - frame.height)
+            || !(frame.leftTopPoint.top + delta.top < scope.height - DragAndDropUseCaseNew.defaultIndent)
             || !(frame.leftTopPoint.top + delta.top > 0))
         {
             return null;

@@ -2,6 +2,7 @@ import ShapeViewNew from '../ShapeView/ShapeViewNew';
 import DragAndDropUseCaseView from '../../UseCase/DragAndDropUseCase/DragAndDropUseCaseView';
 import { Corners, cornersIDs } from '../Type/CornersIDs';
 import { Point } from '../../Сommon/Point';
+import ResizeUseCaseView from '../../UseCase/ResizeUseCase/ResizeUseCaseView';
 
 export default class SelectionViewNew
 {
@@ -10,18 +11,28 @@ export default class SelectionViewNew
     private readonly cornersIDs: Array<string> = cornersIDs;
 
     private readonly dragAndDropUseCaseView: DragAndDropUseCaseView;
+    private readonly resizeUseCaseView: ResizeUseCaseView;
     private doOnMoveShapeCallbacks: Array<Function> = [];
-    private doOnResizeShapeCallbacks: Array<Function> = [];
+    private doOnResizeWhileMovingShapeCallbacks: Array<Function> = [];
+    private doOnResizeWhileMouseUpShapeCallbacks: Array<Function> = [];
     private doOnChangeFrameCallbacks: Array<Function> = [];
 
     constructor()
     {
         this.dragAndDropUseCaseView = new DragAndDropUseCaseView();
+        this.resizeUseCaseView = new ResizeUseCaseView();
+
         this.dragAndDropUseCaseView.doOnMove((delta: Point) =>
             this.doOnMoveShapeCallbacks.forEach((callback: Function) => callback(delta)));
 
         this.dragAndDropUseCaseView.doOnMouseUp((delta: Point) =>
             this.doOnChangeFrameCallbacks.forEach((callback: Function) => callback(delta)));
+
+        this.resizeUseCaseView.doOnChangeSize((delta: Point, cornerType: Corners) =>
+            this.doOnResizeWhileMovingShapeCallbacks.forEach((callback: Function) => callback(delta, cornerType)));
+
+        this.resizeUseCaseView.doOnResize((delta: Point, cornerType: Corners) =>
+            this.doOnResizeWhileMouseUpShapeCallbacks.forEach((callback: Function) => callback(delta, cornerType)));
     }
 
     public select(shapeView: ShapeViewNew): void
@@ -48,7 +59,7 @@ export default class SelectionViewNew
         });
 
         this.bindShape(documentShape);
-        //this.bindCorners(shapeView.getFrame());
+        this.bindCorners();
     }
 
     public unselect(shapeView: ShapeViewNew): void
@@ -74,9 +85,14 @@ export default class SelectionViewNew
         this.doOnMoveShapeCallbacks.push(callback);
     }
 
-    public doOnResizeShape(callback: Function): void
+    public doOnResizeWhileMovingShape(callback: Function): void
     {
-        this.doOnResizeShapeCallbacks.push(callback);
+        this.doOnResizeWhileMovingShapeCallbacks.push(callback);
+    }
+
+    public doOnResizeWhileMouseUpShape(callback: Function): void
+    {
+        this.doOnResizeWhileMouseUpShapeCallbacks.push(callback);
     }
 
     public doOnChangeFrame(callback: Function): void
@@ -119,15 +135,16 @@ export default class SelectionViewNew
         })
     }
 
-    // private bindCorners(frame: Frame): void
-    // {
-    //     this.cornersIDs.forEach((cornerID: string) => {
-    //         const corner = document.getElementById(cornerID);
-    //         corner?.addEventListener('mousedown', (event: MouseEvent) => {
-    //             const cursorPosition: Point = {top: event.pageY, left: event.pageX};
-    //
-    //             this.resizeUseCaseView.cornerMouseDown(frame, corner as HTMLElement, cursorPosition);
-    //         });
-    //     });
-    // }
+    private bindCorners(): void
+    {
+        this.cornersIDs.forEach((cornerID: string) => {
+            const corner = document.getElementById(cornerID);
+            corner?.addEventListener('mousedown', (event: MouseEvent) => {
+                event.stopPropagation();
+                const cursorPosition: Point = {top: event.pageY, left: event.pageX};
+
+                this.resizeUseCaseView.mouseDown(cursorPosition, cornerID as Corners);
+            });
+        });
+    }
 }
