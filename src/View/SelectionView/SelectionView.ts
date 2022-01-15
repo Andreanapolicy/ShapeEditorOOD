@@ -3,8 +3,9 @@ import DragAndDropUseCaseView from '../UseCase/DragAndDropUseCase/DragAndDropUse
 import { Corners, cornersIDs } from '../Type/CornersIDs';
 import { Point } from '../../Сommon/Point';
 import ResizeUseCaseView from '../UseCase/ResizeUseCase/ResizeUseCaseView';
+import ISelectionView from './ISelectionView';
 
-export default class SelectionView
+export default class SelectionView implements ISelectionView
 {
     private readonly selectedClass: string = 'selected';
     private readonly cornerClass: string = 'corner';

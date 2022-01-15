@@ -6,10 +6,11 @@ import { Frame } from '../../Сommon/Frame';
 import ResizeUseCase from '../../UseCase/ResizeUseCase/ResizeUseCase';
 import { Corners } from '../Type/CornersIDs';
 import IShapePresenter from '../../Presenter/ShapePresenter/IShapePresenter';
+import ISelectionView from './ISelectionView';
 
 export default class Selection
 {
-    private readonly selectionView: SelectionView;
+    private readonly selectionView: ISelectionView;
     private shapePresenter: IShapePresenter | null = null;
 
     constructor()

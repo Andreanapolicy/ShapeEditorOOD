@@ -6,11 +6,12 @@ import ShapePresenter from '../ShapePresenter/ShapePresenter';
 import ShapeView from '../../View/ShapeView/ShapeView';
 import Selection from '../../View/SelectionView/Selection';
 import IShapePresenter from '../ShapePresenter/IShapePresenter';
+import ICanvasView from '../../View/CanvasView/ICanvasView';
 
 export default class CanvasPresenter
 {
     private readonly model: ISlide;
-    private readonly canvasView: CanvasView;
+    private readonly canvasView: ICanvasView;
     private readonly selection: Selection;
     private readonly shapesPresenters: Array<IShapePresenter> = [];
 

@@ -1,8 +1,9 @@
 import { ShapeType } from '../../Model/Type/ShapeType';
 import ShapeView from '../ShapeView/ShapeView';
 import { Frame } from '../../Сommon/Frame';
+import ICanvasView from './ICanvasView';
 
-export default class CanvasView
+export default class CanvasView implements ICanvasView
 {
     private readonly canvasID: string = 'canvas';
     private readonly addShapeButtonIDs = {
