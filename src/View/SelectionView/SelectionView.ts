@@ -4,6 +4,8 @@ import { Point } from '../../Сommon/Point';
 import ResizeUseCaseView from '../UseCase/ResizeUseCase/ResizeUseCaseView';
 import ISelectionView from './ISelectionView';
 import IShapeView from '../ShapeView/IShapeView';
+import IDragAndDropUseCaseView from '../UseCase/DragAndDropUseCase/IDragAndDropUseCaseView';
+import IResizeUseCaseView from '../UseCase/ResizeUseCase/IResizeUseCaseView';
 
 export default class SelectionView implements ISelectionView
 {
@@ -11,8 +13,8 @@ export default class SelectionView implements ISelectionView
     private readonly cornerClass: string = 'corner';
     private readonly cornersIDs: Array<string> = cornersIDs;
 
-    private readonly dragAndDropUseCaseView: DragAndDropUseCaseView;
-    private readonly resizeUseCaseView: ResizeUseCaseView;
+    private readonly dragAndDropUseCaseView: IDragAndDropUseCaseView;
+    private readonly resizeUseCaseView: IResizeUseCaseView;
     private doOnMoveShapeCallbacks: Array<Function> = [];
     private doOnResizeWhileMovingShapeCallbacks: Array<Function> = [];
     private doOnResizeWhileMouseUpShapeCallbacks: Array<Function> = [];

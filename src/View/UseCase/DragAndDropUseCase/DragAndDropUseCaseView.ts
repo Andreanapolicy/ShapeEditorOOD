@@ -1,7 +1,8 @@
 import { Point } from '../../../Сommon/Point';
 import { DragAndDropState } from '../../../UseCase/Type/DragAndDropState';
+import IDragAndDropUseCaseView from './IDragAndDropUseCaseView';
 
-export default class DragAndDropUseCaseView
+export default class DragAndDropUseCaseView implements IDragAndDropUseCaseView
 {
     private currentCursorPosition: Point = {top: 0, left: 0};
     private sumDelta: Point = {top: 0, left: 0};

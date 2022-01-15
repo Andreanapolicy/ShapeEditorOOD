@@ -1,10 +1,12 @@
 import { Point } from '../../../Сommon/Point';
 import { Corners } from '../../Type/CornersIDs';
 import DragAndDropUseCaseView from '../DragAndDropUseCase/DragAndDropUseCaseView';
+import IDragAndDropUseCaseView from '../DragAndDropUseCase/IDragAndDropUseCaseView';
+import IResizeUseCaseView from './IResizeUseCaseView';
 
-export default class ResizeUseCaseView
+export default class ResizeUseCaseView implements IResizeUseCaseView
 {
-    private readonly dragAndDropUseCase: DragAndDropUseCaseView;
+    private readonly dragAndDropUseCase: IDragAndDropUseCaseView;
     private cornerType: Corners = Corners.topLeft;
     private doOnChangeSizeCallbacks: Array<Function> = [];
     private doOnResizeCallbacks: Array<Function> = [];
