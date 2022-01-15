@@ -19,7 +19,7 @@ export default class Slide implements ISlide
     {
         const newShape = this.shapeFactory.createShape(type);
         this.shapes.push(newShape);
-        this.doOnAddShapeCallbacks.forEach((callback: Function) => callback());
+        this.doOnAddShapeCallbacks.forEach((callback: Function) => callback(newShape));
 
         return newShape;
     }
