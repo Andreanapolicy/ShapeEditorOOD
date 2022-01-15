@@ -1,30 +1,56 @@
 import { IShape } from '../../Model/Shape/IShape';
+import ShapeView from '../../View/ShapeView/ShapeView';
 import { Frame } from '../../Сommon/Frame';
 
 export default class ShapePresenter
 {
-    private readonly shape: IShape;
-    private doOnChangeShapeCallbacks: Array<Function> = [];
+    private readonly shapeModel: IShape;
+    private readonly shapeView: ShapeView;
+    private doOnDeleteShapeCallback: Array<Function> = [];
+    private doOnChangeShapeCallback: Array<Function> = [];
 
-    constructor(shape: IShape)
+    constructor(shape: IShape, shapeView: ShapeView)
     {
-        this.shape = shape;
-        shape.doOnChangeFrame(() => this.notifyAllObservers());
-        shape.doOnDelete(() => this.notifyAllObservers( {leftTopPoint: {top: 0, left: 0}, width: 0, height: 0}));
+        this.shapeModel = shape;
+        this.shapeView = shapeView;
+
+        shape.doOnChangeFrame(() =>
+        {
+            this.shapeView.setFrame(this.shapeModel.getFrame());
+            this.doOnChangeShapeCallback.forEach((callback: Function) => callback(this.shapeView))
+        });
+
+        shape.doOnDelete(() => this.doOnDeleteShapeCallback.forEach((callback: Function) => callback(this.shapeView.getUUID())));
+    }
+
+    public getShapeModel(): IShape
+    {
+        return this.shapeModel;
+    }
+
+    public getShapeView(): ShapeView
+    {
+        return this.shapeView;
+    }
+
+    public setNewFrameToModel(frame: Frame): void
+    {
+        this.shapeModel.setFrame(frame);
+    }
+
+    public setNewFrameToView(frame: Frame): void
+    {
+        this.shapeView.setFrame(frame);
+        this.doOnChangeShapeCallback.forEach((callback: Function) => callback(this.shapeView))
+    }
+
+    public doOnDeleteShape(callback: Function): void
+    {
+        this.doOnDeleteShapeCallback.push(callback);
     }
 
     public doOnChangeShape(callback: Function): void
     {
-        this.doOnChangeShapeCallbacks.push(callback);
-    }
-
-    public changeModelFrame(newFrame: Frame): void
-    {
-        this.shape.setFrame(newFrame);
-    }
-
-    private notifyAllObservers(frame: Frame = this.shape.getFrame()): void
-    {
-        this.doOnChangeShapeCallbacks.forEach((callback: Function) => callback(frame));
+        this.doOnChangeShapeCallback.push(callback);
     }
 }

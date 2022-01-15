@@ -1,123 +1,110 @@
-import { ISlide } from '../../Model/Slide/ISlide';
-import ShapeView from '../ShapeView/ShapeView';
-import CanvasPresenter from '../../Presenter/CanvasPresenter/CanvasPresenter';
 import { ShapeType } from '../../Model/Type/ShapeType';
-import { IShape } from '../../Model/Shape/IShape';
+import ShapeView from '../ShapeView/ShapeView';
 import { Frame } from '../../Сommon/Frame';
-import SelectionView from '../SelectionView/SelectionView';
 
 export default class CanvasView
 {
     private readonly canvasID: string = 'canvas';
-    private readonly elementClass: string = 'element';
-    private readonly model: ISlide;
-    private readonly canvasPresenter: CanvasPresenter;
-    private readonly selectionView: SelectionView;
-    private readonly scope: Frame = {leftTopPoint: {top: 58, left: 272}, width: 1376, height: 768};
-    private shapes: Array<ShapeView> = [];
+    private readonly addShapeButtonIDs = {
+        'rectangle': 'addRectangle',
+        'triangle': 'addTriangle',
+        'circle': 'addCircle'
+    };
+    private readonly deleteButtonID: string = 'delete';
+    private readonly doOnAddShapeCallbacks: Array<Function> = [];
+    private readonly doOnDeleteShapeCallbacks: Array<Function> = [];
+    private readonly doOnUnselectShapeCallbacks: Array<Function> = [];
+    private readonly doOnSelectShapeCallbacks: Array<Function> = [];
+    private readonly shapeClass: string = 'element';
 
-    constructor(model: ISlide)
+    constructor()
     {
-        this.model = model;
-        this.canvasPresenter = new CanvasPresenter(model);
-        this.selectionView = new SelectionView(this.scope);
-        this.canvasPresenter.doOnChangeModel((shape: IShape) =>
+        document.getElementById(this.addShapeButtonIDs.rectangle)?.addEventListener('click', () =>
+            this.doOnAddShapeCallbacks.forEach((callback: Function) => callback(ShapeType.RECTANGLE)));
+
+        document.getElementById(this.addShapeButtonIDs.triangle)?.addEventListener('click', () =>
+            this.doOnAddShapeCallbacks.forEach((callback: Function) => callback(ShapeType.TRIANGLE)));
+
+        document.getElementById(this.addShapeButtonIDs.circle)?.addEventListener('click', () =>
+            this.doOnAddShapeCallbacks.forEach((callback: Function) => callback(ShapeType.CIRCLE)));
+
+        document.getElementById(this.deleteButtonID)?.addEventListener('click', () =>
+            this.doOnDeleteShapeCallbacks.forEach((callback: Function) => callback()));
+
+        document.addEventListener('mousedown', (event: Event) =>
         {
-            const shapeView: ShapeView | undefined = this.shapes.find((shapeView: ShapeView) => shapeView.getShape() === shape);
-
-            if (shapeView !== undefined)
-            {
-                this.changeShapeView(shapeView);
-            }
-        });
-
-        this.bindAddShape();
-        this.bindCanvasEvent();
-    }
-
-    private bindAddShape(): void
-    {
-        document.getElementById('addRectangle')?.addEventListener('click', () => this.addShape(ShapeType.RECTANGLE));
-        document.getElementById('addTriangle')?.addEventListener('click', () => this.addShape(ShapeType.TRIANGLE));
-        document.getElementById('addCircle')?.addEventListener('click', () => this.addShape(ShapeType.CIRCLE));
-        document.getElementById('delete')?.addEventListener('click', () =>
-        {
-            const selectedShape: ShapeView | null = this.selectionView.getSelectedShape();
-
-            if (selectedShape === null)
-            {
-                return;
-            }
-
-            this.canvasPresenter.deleteShape(selectedShape);
-        });
-    }
-
-    private bindSelectShape(shape: ShapeView): void
-    {
-        const shapeView: HTMLElement | null = document.getElementById(shape.getID());
-        if (shapeView === null)
-        {
-            return;
-        }
-
-        shapeView.addEventListener('mousedown', () => this.selectionView.select(shape));
-    }
-
-    private bindCanvasEvent(): void
-    {
-        document.getElementById(this.canvasID)?.addEventListener('click', (event: Event) => {
             if ((event.target as HTMLElement).id === this.canvasID)
             {
-                this.selectionView.unselect();
+                this.doOnUnselectShapeCallbacks.forEach((callback: Function) => callback())
             }
-        });
+        })
     }
 
-    private addShape(type: ShapeType): void
+    public doOnAddShape(callback: Function): void
     {
-        const modelShape: IShape = this.canvasPresenter.addShape(type);
-
-        let newShape = new ShapeView(modelShape.getFrame(), modelShape.getType(), modelShape, this.shapes.length.toString());
-        this.shapes.push(newShape);
-        newShape.doOnChangeShape(() => this.changeShapeView(newShape));
-        this.addShapeView(newShape);
-
-        this.bindSelectShape(newShape);
+        this.doOnAddShapeCallbacks.push(callback);
     }
 
-    private changeShapeView(shape: ShapeView): void
+    public doOnDeleteShape(callback: Function): void
     {
-        if (shape.getFrame().width === 0 && shape.getFrame().height === 0)
-        {
-            this.deleteShapeView(shape);
-        }
+        this.doOnDeleteShapeCallbacks.push(callback);
+    }
 
-        const shapeView: HTMLElement | null = document.getElementById(shape.getID());
-        if (shapeView === null)
+    public doOnUnselectShape(callback: Function): void
+    {
+        this.doOnUnselectShapeCallbacks.push(callback);
+    }
+
+    public doOnSelectShape(callback: Function): void
+    {
+        this.doOnSelectShapeCallbacks.push(callback);
+    }
+
+    public addShape(shapeView: ShapeView): void
+    {
+        const documentShape: HTMLElement = document.createElement('div');
+        documentShape.id = shapeView.getUUID();
+        documentShape.classList.add(this.shapeClass);
+        documentShape.appendChild(shapeView.getContent().getContent());
+        document.getElementById(this.canvasID)?.appendChild(documentShape);
+        shapeView.setFrame(shapeView.getFrame());
+
+        this.bindSelectDocumentShape(documentShape);
+
+        CanvasView.setDocumentShapeFrame(documentShape, shapeView.getFrame());
+    }
+
+    public deleteShape(id: string): void
+    {
+        const documentShape: HTMLElement | null = document.getElementById(id);
+        if (documentShape === null)
         {
             return;
         }
 
-        const shapeViewClone = shapeView.cloneNode(true);
-        document.getElementById(this.canvasID)?.replaceChild(shapeViewClone, shapeView);
-        this.bindSelectShape(shape);
-        this.selectionView.select(shape);
-        CanvasView.setFrameToView(shapeViewClone as HTMLElement, shape.getFrame());
-        shape.getContent().setFrame(shape.getFrame());
+        document.getElementById(this.canvasID)?.removeChild(documentShape);
     }
 
-    private addShapeView(shape: ShapeView): void
+    public changeShape(shapeView: ShapeView): void
     {
-        const newShape: HTMLElement = document.createElement('div');
-        newShape.classList.add(this.elementClass);
-        newShape.id = shape.getID();
-        newShape.appendChild(shape.getContent().getContent());
-        document.getElementById(this.canvasID)?.appendChild(newShape);
-        shape.getContent().setFrame(shape.getFrame());
+        const documentShape: HTMLElement | null = document.getElementById(shapeView.getUUID());
+        if (documentShape === null)
+        {
+            return;
+        }
+
+        const documentShapeClone: Node = documentShape.cloneNode();
+        document.getElementById(this.canvasID)?.replaceChild(documentShapeClone, documentShape);
+        documentShapeClone.appendChild(shapeView.getContent().getContent());
+        shapeView.setFrame(shapeView.getFrame());
+
+        this.bindSelectDocumentShape(documentShapeClone as HTMLElement);
+        CanvasView.setDocumentShapeFrame(documentShapeClone as HTMLElement, shapeView.getFrame());
+
+        this.doOnSelectShapeCallbacks.forEach((callback: Function) => callback(shapeView.getUUID()));
     }
 
-    private static setFrameToView(element: HTMLElement, frame: Frame): void
+    private static setDocumentShapeFrame(element: HTMLElement, frame: Frame): void
     {
         element.style.width = frame.width + 'px';
         element.style.height = frame.height + 'px';
@@ -125,15 +112,9 @@ export default class CanvasView
         element.style.left = frame.leftTopPoint.left + 'px';
     }
 
-    private deleteShapeView(shape: ShapeView): void
+    private bindSelectDocumentShape(documentShape: HTMLElement): void
     {
-        const deletedShape: HTMLElement | null = document.getElementById(shape.getID());
-
-        if (deletedShape === null)
-        {
-            return;
-        }
-
-        document.getElementById(this.canvasID)?.removeChild(deletedShape);
+        documentShape.addEventListener('mousedown', () =>
+            this.doOnSelectShapeCallbacks.forEach((callback: Function) => callback(documentShape.id)));
     }
 }

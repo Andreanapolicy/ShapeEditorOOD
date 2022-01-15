@@ -1,5 +1,5 @@
-import { Point } from '../../Сommon/Point';
-import { Corners } from '../../View/Type/CornersIDs';
+import { Point } from '../../../Сommon/Point';
+import { Corners } from '../../Type/CornersIDs';
 import DragAndDropUseCaseView from '../DragAndDropUseCase/DragAndDropUseCaseView';
 
 export default class ResizeUseCaseView

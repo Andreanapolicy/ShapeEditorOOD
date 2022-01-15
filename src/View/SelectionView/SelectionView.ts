@@ -1,81 +1,72 @@
 import ShapeView from '../ShapeView/ShapeView';
+import DragAndDropUseCaseView from '../UseCase/DragAndDropUseCase/DragAndDropUseCaseView';
 import { Corners, cornersIDs } from '../Type/CornersIDs';
-import SelectionPresenter from '../../Presenter/SelectionPresenter/SelectionPresenter';
-import { Frame } from '../../Сommon/Frame';
+import { Point } from '../../Сommon/Point';
+import ResizeUseCaseView from '../UseCase/ResizeUseCase/ResizeUseCaseView';
 
 export default class SelectionView
 {
     private readonly selectedClass: string = 'selected';
     private readonly cornerClass: string = 'corner';
     private readonly cornersIDs: Array<string> = cornersIDs;
-    private readonly selectionPresenter: SelectionPresenter;
-    private shape: ShapeView | null = null;
 
-    constructor(scope: Frame)
+    private readonly dragAndDropUseCaseView: DragAndDropUseCaseView;
+    private readonly resizeUseCaseView: ResizeUseCaseView;
+    private doOnMoveShapeCallbacks: Array<Function> = [];
+    private doOnResizeWhileMovingShapeCallbacks: Array<Function> = [];
+    private doOnResizeWhileMouseUpShapeCallbacks: Array<Function> = [];
+    private doOnChangeFrameCallbacks: Array<Function> = [];
+
+    constructor()
     {
-        this.selectionPresenter = new SelectionPresenter(scope);
+        this.dragAndDropUseCaseView = new DragAndDropUseCaseView();
+        this.resizeUseCaseView = new ResizeUseCaseView();
 
-        this.selectionPresenter.doOnMoveShape((newFrame: Frame) => this.shape?.setFrame(newFrame));
-        this.selectionPresenter.doOnResizeShape((newFrame: Frame) => this.shape?.setFrame(newFrame));
-        this.selectionPresenter.doOnChangeFrame((newFrame: Frame) => this.shape?.changeFrame(newFrame));
+        this.dragAndDropUseCaseView.doOnMove((delta: Point) =>
+            this.doOnMoveShapeCallbacks.forEach((callback: Function) => callback(delta)));
+
+        this.dragAndDropUseCaseView.doOnMouseUp((delta: Point) =>
+            this.doOnChangeFrameCallbacks.forEach((callback: Function) => callback(delta)));
+
+        this.resizeUseCaseView.doOnChangeSize((delta: Point, cornerType: Corners) =>
+            this.doOnResizeWhileMovingShapeCallbacks.forEach((callback: Function) => callback(delta, cornerType)));
+
+        this.resizeUseCaseView.doOnResize((delta: Point, cornerType: Corners) =>
+            this.doOnResizeWhileMouseUpShapeCallbacks.forEach((callback: Function) => callback(delta, cornerType)));
     }
 
-    public select(shape: ShapeView): void
+    public select(shapeView: ShapeView): void
     {
-        this.deleteSelectionView();
-        this.shape = shape;
-        this.addSelectionView();
-
-        this.bindCorners();
-        this.bindShape();
-    }
-
-    public getSelectedShape(): ShapeView | null
-    {
-        return this.shape;
-    }
-
-    public unselect(): void
-    {
-        this.deleteSelectionView();
-        this.shape = null;
-    }
-
-    private addSelectionView(): void
-    {
-        if (this.shape === null)
+        const documentShape: HTMLElement | null = document.getElementById(shapeView.getUUID());
+        if (documentShape === null)
         {
             return;
         }
 
-        const shapeView: HTMLElement | null = document.getElementById(this.shape.getID());
-
-        if (shapeView === null)
+        if (documentShape.classList.contains(this.selectedClass))
         {
             return;
         }
 
-        shapeView.classList.add(this.selectedClass);
+        documentShape.classList.add(this.selectedClass);
         this.cornersIDs.forEach((cornerID: string) => {
             const newCorner: HTMLElement = document.createElement('div');
             newCorner.classList.add(this.cornerClass);
             newCorner.classList.add(cornerID.toLowerCase());
             newCorner.id = cornerID;
-            this.setCornerPosition(newCorner, cornerID);
-            shapeView.appendChild(newCorner);
+            SelectionView.setCornerPosition(newCorner, cornerID, documentShape);
+            documentShape.appendChild(newCorner);
         });
+
+        this.bindShape(documentShape);
+        this.bindCorners();
     }
 
-    private deleteSelectionView(): void
+    public unselect(shapeView: ShapeView): void
     {
-        if (this.shape === null)
-        {
-            return;
-        }
+        const documentShape: HTMLElement | null = document.getElementById(shapeView.getUUID());
 
-        const shapeView: HTMLElement | null = document.getElementById(this.shape.getID());
-
-        if (shapeView === null)
+        if (documentShape === null)
         {
             return;
         }
@@ -85,11 +76,35 @@ export default class SelectionView
         {
             corners.item(corners.length - 1)?.parentNode?.removeChild(corners[corners.length - 1]);
         }
-        shapeView.classList.remove(this.selectedClass);
+
+        documentShape.classList.remove(this.selectedClass);
     }
 
-    private setCornerPosition(corner: HTMLElement, cornerID: string): void
+    public doOnMoveShape(callback: Function): void
     {
+        this.doOnMoveShapeCallbacks.push(callback);
+    }
+
+    public doOnResizeWhileMovingShape(callback: Function): void
+    {
+        this.doOnResizeWhileMovingShapeCallbacks.push(callback);
+    }
+
+    public doOnResizeWhileMouseUpShape(callback: Function): void
+    {
+        this.doOnResizeWhileMouseUpShapeCallbacks.push(callback);
+    }
+
+    public doOnChangeFrame(callback: Function): void
+    {
+        this.doOnChangeFrameCallbacks.push(callback);
+    }
+
+    private static setCornerPosition(corner: HTMLElement, cornerID: string, element: HTMLElement): void
+    {
+        const width: number = element.offsetWidth;
+        const height: number = element.offsetHeight;
+
         switch (cornerID)
         {
             case Corners.topLeft:
@@ -98,43 +113,38 @@ export default class SelectionView
                 break;
             case Corners.topRight:
                 corner.style.top = '-5px';
-                corner.style.left = (this.shape?.getFrame().width ?? 0) - 5 + 'px';
+                corner.style.left = width - 5 + 'px';
                 break;
             case Corners.bottomRight:
-                corner.style.top = (this.shape?.getFrame().height ?? 0) - 5 + 'px';
-                corner.style.left = (this.shape?.getFrame().width ?? 0) - 5 + 'px';
+                corner.style.top = height - 5 + 'px';
+                corner.style.left = width - 5 + 'px';
                 break;
             case Corners.bottomLeft:
-                corner.style.top = (this.shape?.getFrame().height ?? 0) - 5 + 'px';
+                corner.style.top = height - 5 + 'px';
                 corner.style.left = '-5px';
                 break;
         }
     }
 
-    private bindCorners(): void
+    private bindShape(shape: HTMLElement): void
     {
-        if (this.shape === null || this.shape === undefined)
+        shape.addEventListener('mousedown', (event: MouseEvent) =>
         {
-            return;
-        }
-
-        this.cornersIDs.forEach((cornerID: string) =>
-            {
-                const corner = document.getElementById(cornerID);
-                corner?.addEventListener('mousedown', (event: MouseEvent) =>
-                    this.selectionPresenter.cornerMouseDown(this.shape as ShapeView, corner as HTMLElement, event,));
-            }
-        );
+            const cursorPosition: Point = {top: event.pageY, left: event.pageX};
+            this.dragAndDropUseCaseView.mouseDown(cursorPosition);
+        })
     }
 
-    private bindShape(): void
+    private bindCorners(): void
     {
-        if (this.shape === null || this.shape === undefined)
-        {
-            return;
-        }
+        this.cornersIDs.forEach((cornerID: string) => {
+            const corner = document.getElementById(cornerID);
+            corner?.addEventListener('mousedown', (event: MouseEvent) => {
+                event.stopPropagation();
+                const cursorPosition: Point = {top: event.pageY, left: event.pageX};
 
-        document.getElementById(this.shape.getID())?.addEventListener('mousedown', (event: MouseEvent) =>
-            this.selectionPresenter.shapeMouseDown(this.shape as ShapeView, event));
+                this.resizeUseCaseView.mouseDown(cursorPosition, cornerID as Corners);
+            });
+        });
     }
 }

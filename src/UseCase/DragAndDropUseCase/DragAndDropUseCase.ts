@@ -1,71 +1,20 @@
 import { Frame } from '../../Сommon/Frame';
 import { Point } from '../../Сommon/Point';
-import { DragAndDropState } from '../Type/DragAndDropState';
 
 export default class DragAndDropUseCase
 {
-    private readonly scope: Frame;
-    private currentCursorPosition: Point = {top: 0, left: 0};
-    private doOnMoveCallbacks: Array<Function> = [];
-    private doOnMouseUpCallbacks: Array<Function> = [];
-    private state: DragAndDropState = DragAndDropState.none;
+    private static defaultIndent: number = 30;
 
-    constructor(scope: Frame)
+    public static checkForScreenCapacity(frame: Frame, scope: Frame, delta: Point = {top: 0, left: 0}): Frame | null
     {
-        this.scope = scope;
-    }
-
-    public mouseDown(event: MouseEvent): void
-    {
-        this.state = DragAndDropState.move;
-        this.currentCursorPosition = {top: event.pageY, left: event.pageX};
-
-        document.addEventListener('mousemove', (event) => this.moveElement(event));
-
-        document.addEventListener('mouseup', (event: MouseEvent) =>
+        if (!(frame.leftTopPoint.left + delta.left < scope.width - DragAndDropUseCase.defaultIndent)
+            || !(frame.leftTopPoint.left + delta.left > DragAndDropUseCase.defaultIndent - frame.width)
+            || !(frame.leftTopPoint.top + delta.top < scope.height - DragAndDropUseCase.defaultIndent)
+            || !(frame.leftTopPoint.top + delta.top > DragAndDropUseCase.defaultIndent - frame.height))
         {
-            if (this.state === DragAndDropState.none)
-            {
-                return;
-            }
-
-            this.state = DragAndDropState.none;
-
-            const delta: Point = {top: this.currentCursorPosition.top - event.pageY, left: this.currentCursorPosition.left - event.pageX};
-            this.currentCursorPosition = {top: this.currentCursorPosition.top + delta.top, left: this.currentCursorPosition.left + delta.left};
-
-            this.doOnMouseUpCallbacks.forEach((callback: Function) => callback(delta));
-        });
-    }
-
-    public doOnMove(callback: Function): void
-    {
-        this.doOnMoveCallbacks.push(callback);
-    }
-
-    public doOnMouseUp(callback: Function): void
-    {
-        this.doOnMouseUpCallbacks.push(callback);
-    }
-
-    private moveElement(event: MouseEvent): void
-    {
-        if (this.state === DragAndDropState.none)
-        {
-            return;
+            return null;
         }
 
-        if (!(event.pageX < this.scope.leftTopPoint.left + this.scope.width)
-            || !(event.pageX > this.scope.leftTopPoint.left)
-            || !(event.pageY < this.scope.leftTopPoint.top + this.scope.height)
-            || !(event.pageY > this.scope.leftTopPoint.top))
-        {
-            return;
-        }
-        const delta: Point = {top: event.pageY - this.currentCursorPosition.top , left: event.pageX - this.currentCursorPosition.left};
-
-        this.currentCursorPosition = {top: this.currentCursorPosition.top + delta.top, left: this.currentCursorPosition.left + delta.left};
-
-        this.doOnMoveCallbacks.forEach((callback: Function) => callback(delta));
+        return {...frame, leftTopPoint: {top: frame.leftTopPoint.top + delta.top, left: frame.leftTopPoint.left + delta.left}}
     }
 }

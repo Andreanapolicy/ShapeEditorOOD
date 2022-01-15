@@ -1,49 +1,25 @@
-import { Frame } from '../../Сommon/Frame';
+import {v4 as uuid} from 'uuid';
 import { ShapeType } from '../../Model/Type/ShapeType';
-import { IShape } from '../../Model/Shape/IShape';
-import ShapePresenter from '../../Presenter/ShapePresenter/ShapePresenter';
 import ShapeContent from '../ShapeContent/ShapeContent';
+import { Frame } from '../../Сommon/Frame';
 import ShapeContentFactory from '../ShapeContentFactory/ShapeContentFactory';
 
 export default class ShapeView
 {
-    private readonly type: ShapeType;
-    private readonly shapePresenter: ShapePresenter;
-    private readonly shape: IShape;
-    private readonly id: string;
+    private readonly UUID: string;
     private readonly shapeContent: ShapeContent;
     private frame: Frame;
-    private doOnChangeShapeCallback: Array<Function> = [];
 
-    constructor(frame: Frame, type: ShapeType, shape: IShape, id: string)
+    constructor(frame: Frame, type: ShapeType)
     {
+        this.UUID = uuid();
         this.frame = frame;
-        this.type = type;
-        this.shape = shape;
-        this.id = id;
-        this.shapeContent = ShapeContentFactory.createShapeContent(type, id);
-        this.shapePresenter = new ShapePresenter(shape);
-
-        this.shapePresenter.doOnChangeShape((newFrame: Frame) =>
-        {
-            this.frame = newFrame;
-            this.notifyAllObservers();
-        })
+        this.shapeContent = ShapeContentFactory.createShapeContent(type, this.UUID);
     }
 
-    public getFrame(): Frame
+    public getUUID(): string
     {
-        return this.frame;
-    }
-
-    public getType(): ShapeType
-    {
-        return this.type;
-    }
-
-    public getID(): string
-    {
-        return this.id;
+        return this.UUID;
     }
 
     public getContent(): ShapeContent
@@ -51,32 +27,14 @@ export default class ShapeView
         return this.shapeContent;
     }
 
+    public getFrame(): Frame
+    {
+        return this.frame;
+    }
+
     public setFrame(newFrame: Frame): void
     {
         this.frame = newFrame;
-        this.doOnChangeShapeCallback.forEach((callback: Function) => callback());
-    }
-
-    public changeFrame(newFrame: Frame): void
-    {
-        this.frame = newFrame;
-        this.doOnChangeShapeCallback.forEach((callback: Function) => callback());
-
-        this.shapePresenter.changeModelFrame(newFrame);
-    }
-
-    public getShape(): IShape
-    {
-        return this.shape;
-    }
-
-    public doOnChangeShape(callback: Function): void
-    {
-        this.doOnChangeShapeCallback.push(callback);
-    }
-
-    private notifyAllObservers(): void
-    {
-        this.doOnChangeShapeCallback.forEach((callback: Function) => callback());
+        this.shapeContent.setFrame(newFrame);
     }
 }

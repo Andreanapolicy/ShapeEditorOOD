@@ -1,5 +1,5 @@
-import { Point } from '../../Сommon/Point';
-import { DragAndDropState } from '../Type/DragAndDropState';
+import { Point } from '../../../Сommon/Point';
+import { DragAndDropState } from '../../../UseCase/Type/DragAndDropState';
 
 export default class DragAndDropUseCaseView
 {

@@ -1,27 +1,27 @@
-import SelectionViewNew from './SelectionViewNew';
-import ShapePresenterNew from '../../Presenter/ShapePresenter/ShapePresenterNew';
+import SelectionView from './SelectionView';
+import ShapePresenter from '../../Presenter/ShapePresenter/ShapePresenter';
 import { Point } from '../../Сommon/Point';
-import DragAndDropUseCaseNew from '../../UseCase/DragAndDropUseCase/DragAndDropUseCaseNew';
+import DragAndDropUseCase from '../../UseCase/DragAndDropUseCase/DragAndDropUseCase';
 import { Scope } from '../Type/Scope';
 import { Frame } from '../../Сommon/Frame';
-import ResizeUseCaseNew from '../../UseCase/ResizeUseCase/ResizeUseCaseNew';
+import ResizeUseCase from '../../UseCase/ResizeUseCase/ResizeUseCase';
 import { Corners } from '../Type/CornersIDs';
 
 export default class Selection
 {
-    private readonly selectionView: SelectionViewNew;
-    private shapePresenter: ShapePresenterNew | null = null;
+    private readonly selectionView: SelectionView;
+    private shapePresenter: ShapePresenter | null = null;
 
     constructor()
     {
-        this.selectionView = new SelectionViewNew();
+        this.selectionView = new SelectionView();
         this.selectionView.doOnMoveShape((delta: Point) => {
             if (this.shapePresenter === null)
             {
                 return;
             }
 
-            const newFrame: Frame | null = DragAndDropUseCaseNew.checkForScreenCapacity(this.shapePresenter.getShapeModel().getFrame(), Scope, delta);
+            const newFrame: Frame | null = DragAndDropUseCase.checkForScreenCapacity(this.shapePresenter.getShapeModel().getFrame(), Scope, delta);
 
             if (newFrame === null)
             {
@@ -35,7 +35,7 @@ export default class Selection
             {
                 return;
             }
-            const newFrame: Frame | null = DragAndDropUseCaseNew.checkForScreenCapacity(this.shapePresenter.getShapeModel().getFrame(), Scope, delta);
+            const newFrame: Frame | null = DragAndDropUseCase.checkForScreenCapacity(this.shapePresenter.getShapeModel().getFrame(), Scope, delta);
 
             if (newFrame === null)
             {
@@ -51,7 +51,7 @@ export default class Selection
             {
                 return;
             }
-            const newFrame: Frame | null = ResizeUseCaseNew.getResultFrame(delta, this.shapePresenter.getShapeModel().getFrame(), cornerType);
+            const newFrame: Frame | null = ResizeUseCase.getResultFrame(delta, this.shapePresenter.getShapeModel().getFrame(), cornerType);
 
             if (newFrame === null)
             {
@@ -65,7 +65,7 @@ export default class Selection
             {
                 return;
             }
-            const newFrame: Frame | null = ResizeUseCaseNew.getResultFrame(delta, this.shapePresenter.getShapeModel().getFrame(), cornerType);
+            const newFrame: Frame | null = ResizeUseCase.getResultFrame(delta, this.shapePresenter.getShapeModel().getFrame(), cornerType);
 
             if (newFrame === null)
             {
@@ -77,7 +77,7 @@ export default class Selection
         });
     }
 
-    public select(shapePresenter: ShapePresenterNew): void
+    public select(shapePresenter: ShapePresenter): void
     {
         if (this.shapePresenter !== null)
         {
@@ -97,7 +97,7 @@ export default class Selection
         }
     }
 
-    public getSelected(): ShapePresenterNew | null
+    public getSelected(): ShapePresenter | null
     {
         return this.shapePresenter;
     }
