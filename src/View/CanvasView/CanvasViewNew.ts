@@ -74,9 +74,9 @@ export default class CanvasViewNew
         CanvasViewNew.setDocumentShapeFrame(documentShape, shapeView.getFrame());
     }
 
-    public deleteShape(id: number): void
+    public deleteShape(id: string): void
     {
-        const documentShape: HTMLElement | null = document.getElementById('' + id);
+        const documentShape: HTMLElement | null = document.getElementById(id);
         if (documentShape === null)
         {
             return;

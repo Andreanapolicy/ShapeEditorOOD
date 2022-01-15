@@ -41,7 +41,7 @@ export default class CanvasPresenterNew
                 return;
             }
 
-            this.model.removeShapeByUUID(selectedShapePresenter.getShapeView().getUUID());
+            this.model.removeShapeByUUID(selectedShapePresenter.getShapeModel().getUUID());
         });
 
         this.canvasView.doOnUnselectShape(() => this.selection.unselect());
@@ -54,14 +54,14 @@ export default class CanvasPresenterNew
         this.shapesPresenters.push(newShapePresenter);
 
         newShapePresenter.doOnChangeShape((shapeView: ShapeViewNew) => this.canvasView.changeShape(shapeView));
-        newShapePresenter.doOnDeleteShape((index: number) => this.deleteShape(index));
+        newShapePresenter.doOnDeleteShape((id: string) => this.deleteShape(id));
 
         this.canvasView.addShape(newShapeView);
     }
 
-    private deleteShape(index: number): void
+    private deleteShape(id: string): void
     {
-        this.shapesPresenters.splice(index, 1);
-        this.canvasView.deleteShape(index);
+        this.shapesPresenters.filter((shapesPresenter: ShapePresenterNew) => shapesPresenter.getShapeView().getUUID() !== id);
+        this.canvasView.deleteShape(id);
     }
 }
