@@ -1,8 +1,9 @@
 import { IShape } from '../../Model/Shape/IShape';
 import ShapeView from '../../View/ShapeView/ShapeView';
 import { Frame } from '../../Сommon/Frame';
+import IShapePresenter from './IShapePresenter';
 
-export default class ShapePresenter
+export default class ShapePresenter implements IShapePresenter
 {
     private readonly shapeModel: IShape;
     private readonly shapeView: ShapeView;

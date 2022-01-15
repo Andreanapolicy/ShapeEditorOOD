@@ -1,16 +1,16 @@
 import SelectionView from './SelectionView';
-import ShapePresenter from '../../Presenter/ShapePresenter/ShapePresenter';
 import { Point } from '../../Сommon/Point';
 import DragAndDropUseCase from '../../UseCase/DragAndDropUseCase/DragAndDropUseCase';
 import { Scope } from '../Type/Scope';
 import { Frame } from '../../Сommon/Frame';
 import ResizeUseCase from '../../UseCase/ResizeUseCase/ResizeUseCase';
 import { Corners } from '../Type/CornersIDs';
+import IShapePresenter from '../../Presenter/ShapePresenter/IShapePresenter';
 
 export default class Selection
 {
     private readonly selectionView: SelectionView;
-    private shapePresenter: ShapePresenter | null = null;
+    private shapePresenter: IShapePresenter | null = null;
 
     constructor()
     {
@@ -77,7 +77,7 @@ export default class Selection
         });
     }
 
-    public select(shapePresenter: ShapePresenter): void
+    public select(shapePresenter: IShapePresenter): void
     {
         if (this.shapePresenter !== null)
         {
@@ -97,7 +97,7 @@ export default class Selection
         }
     }
 
-    public getSelected(): ShapePresenter | null
+    public getSelected(): IShapePresenter | null
     {
         return this.shapePresenter;
     }

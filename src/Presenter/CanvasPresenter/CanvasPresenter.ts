@@ -5,13 +5,14 @@ import { IShape } from '../../Model/Shape/IShape';
 import ShapePresenter from '../ShapePresenter/ShapePresenter';
 import ShapeView from '../../View/ShapeView/ShapeView';
 import Selection from '../../View/SelectionView/Selection';
+import IShapePresenter from '../ShapePresenter/IShapePresenter';
 
 export default class CanvasPresenter
 {
     private readonly model: ISlide;
     private readonly canvasView: CanvasView;
     private readonly selection: Selection;
-    private readonly shapesPresenters: Array<ShapePresenter> = [];
+    private readonly shapesPresenters: Array<IShapePresenter> = [];
 
     constructor(model: ISlide)
     {
@@ -23,7 +24,7 @@ export default class CanvasPresenter
         this.canvasView.doOnAddShape((shapeType: ShapeType) => this.model.createShape(shapeType));
 
         this.canvasView.doOnSelectShape((id: string) => {
-            const indexShapePresenter: ShapePresenter | undefined = this.shapesPresenters.find((shapePresenter: ShapePresenter) =>
+            const indexShapePresenter: IShapePresenter | undefined = this.shapesPresenters.find((shapePresenter: IShapePresenter) =>
                 shapePresenter.getShapeView().getUUID() === id);
 
             if (indexShapePresenter === undefined)
@@ -35,7 +36,7 @@ export default class CanvasPresenter
         });
 
         this.canvasView.doOnDeleteShape(() => {
-            const selectedShapePresenter: ShapePresenter | null = this.selection.getSelected();
+            const selectedShapePresenter: IShapePresenter | null = this.selection.getSelected();
             if (selectedShapePresenter === null)
             {
                 return;
@@ -50,7 +51,7 @@ export default class CanvasPresenter
     private addShape(shapeModel: IShape): void
     {
         const newShapeView: ShapeView = new ShapeView(shapeModel.getFrame(), shapeModel.getType());
-        const newShapePresenter: ShapePresenter = new ShapePresenter(shapeModel, newShapeView);
+        const newShapePresenter: IShapePresenter = new ShapePresenter(shapeModel, newShapeView);
         this.shapesPresenters.push(newShapePresenter);
 
         newShapePresenter.doOnChangeShape((shapeView: ShapeView) => this.canvasView.changeShape(shapeView));
@@ -61,7 +62,7 @@ export default class CanvasPresenter
 
     private deleteShape(id: string): void
     {
-        this.shapesPresenters.filter((shapesPresenter: ShapePresenter) => shapesPresenter.getShapeView().getUUID() !== id);
+        this.shapesPresenters.filter((shapesPresenter: IShapePresenter) => shapesPresenter.getShapeView().getUUID() !== id);
         this.canvasView.deleteShape(id);
     }
 }
