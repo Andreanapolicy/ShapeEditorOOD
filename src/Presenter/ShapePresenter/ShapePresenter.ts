@@ -1,16 +1,16 @@
 import { IShape } from '../../Model/Shape/IShape';
-import ShapeView from '../../View/ShapeView/ShapeView';
 import { Frame } from '../../Сommon/Frame';
 import IShapePresenter from './IShapePresenter';
+import IShapeView from '../../View/ShapeView/IShapeView';
 
 export default class ShapePresenter implements IShapePresenter
 {
     private readonly shapeModel: IShape;
-    private readonly shapeView: ShapeView;
+    private readonly shapeView: IShapeView;
     private doOnDeleteShapeCallback: Array<Function> = [];
     private doOnChangeShapeCallback: Array<Function> = [];
 
-    constructor(shape: IShape, shapeView: ShapeView)
+    constructor(shape: IShape, shapeView: IShapeView)
     {
         this.shapeModel = shape;
         this.shapeView = shapeView;
@@ -29,7 +29,7 @@ export default class ShapePresenter implements IShapePresenter
         return this.shapeModel;
     }
 
-    public getShapeView(): ShapeView
+    public getShapeView(): IShapeView
     {
         return this.shapeView;
     }

@@ -1,6 +1,7 @@
 import { Frame } from '../../Сommon/Frame';
+import IShapeContent from './IShapeContent';
 
-export default class ShapeContent
+export default class ShapeContent implements IShapeContent
 {
     protected readonly id: string;
     protected wrapper: SVGElement;

@@ -1,7 +1,7 @@
 import { ShapeType } from '../../Model/Type/ShapeType';
-import ShapeView from '../ShapeView/ShapeView';
 import { Frame } from '../../Сommon/Frame';
 import ICanvasView from './ICanvasView';
+import IShapeView from '../ShapeView/IShapeView';
 
 export default class CanvasView implements ICanvasView
 {
@@ -61,7 +61,7 @@ export default class CanvasView implements ICanvasView
         this.doOnSelectShapeCallbacks.push(callback);
     }
 
-    public addShape(shapeView: ShapeView): void
+    public addShape(shapeView: IShapeView): void
     {
         const documentShape: HTMLElement = document.createElement('div');
         documentShape.id = shapeView.getUUID();
@@ -86,7 +86,7 @@ export default class CanvasView implements ICanvasView
         document.getElementById(this.canvasID)?.removeChild(documentShape);
     }
 
-    public changeShape(shapeView: ShapeView): void
+    public changeShape(shapeView: IShapeView): void
     {
         const documentShape: HTMLElement | null = document.getElementById(shapeView.getUUID());
         if (documentShape === null)

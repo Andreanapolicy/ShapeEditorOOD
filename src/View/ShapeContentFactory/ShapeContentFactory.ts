@@ -1,12 +1,12 @@
 import { ShapeType } from '../../Model/Type/ShapeType';
-import ShapeContent from '../ShapeContent/ShapeContent';
 import Rectangle from '../ShapeContent/Rectangle';
 import Circle from '../ShapeContent/Circle';
 import Triangle from '../ShapeContent/Triangle';
+import IShapeContent from '../ShapeContent/IShapeContent';
 
 export default class ShapeContentFactory
 {
-    public static createShapeContent(shapeType: ShapeType, id: string): ShapeContent
+    public static createShapeContent(shapeType: ShapeType, id: string): IShapeContent
     {
         switch (shapeType)
         {

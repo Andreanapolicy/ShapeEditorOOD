@@ -1,11 +1,11 @@
 import { IShape } from '../../Model/Shape/IShape';
-import ShapeView from '../../View/ShapeView/ShapeView';
 import { Frame } from '../../Сommon/Frame';
+import IShapeView from '../../View/ShapeView/IShapeView';
 
 export default interface IShapePresenter
 {
     getShapeModel(): IShape;
-    getShapeView(): ShapeView;
+    getShapeView(): IShapeView;
     setNewFrameToModel(frame: Frame): void;
     setNewFrameToView(frame: Frame): void;
     doOnDeleteShape(callback: Function): void;

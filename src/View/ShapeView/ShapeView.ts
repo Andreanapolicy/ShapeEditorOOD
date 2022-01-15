@@ -1,13 +1,14 @@
 import {v4 as uuid} from 'uuid';
 import { ShapeType } from '../../Model/Type/ShapeType';
-import ShapeContent from '../ShapeContent/ShapeContent';
 import { Frame } from '../../Сommon/Frame';
 import ShapeContentFactory from '../ShapeContentFactory/ShapeContentFactory';
+import IShapeContent from '../ShapeContent/IShapeContent';
+import IShapeView from './IShapeView';
 
-export default class ShapeView
+export default class ShapeView implements IShapeView
 {
     private readonly UUID: string;
-    private readonly shapeContent: ShapeContent;
+    private readonly shapeContent: IShapeContent;
     private frame: Frame;
 
     constructor(frame: Frame, type: ShapeType)
@@ -22,7 +23,7 @@ export default class ShapeView
         return this.UUID;
     }
 
-    public getContent(): ShapeContent
+    public getContent(): IShapeContent
     {
         return this.shapeContent;
     }

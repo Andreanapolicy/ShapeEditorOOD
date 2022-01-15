@@ -1,9 +1,9 @@
-import ShapeView from '../ShapeView/ShapeView';
 import DragAndDropUseCaseView from '../UseCase/DragAndDropUseCase/DragAndDropUseCaseView';
 import { Corners, cornersIDs } from '../Type/CornersIDs';
 import { Point } from '../../Сommon/Point';
 import ResizeUseCaseView from '../UseCase/ResizeUseCase/ResizeUseCaseView';
 import ISelectionView from './ISelectionView';
+import IShapeView from '../ShapeView/IShapeView';
 
 export default class SelectionView implements ISelectionView
 {
@@ -36,7 +36,7 @@ export default class SelectionView implements ISelectionView
             this.doOnResizeWhileMouseUpShapeCallbacks.forEach((callback: Function) => callback(delta, cornerType)));
     }
 
-    public select(shapeView: ShapeView): void
+    public select(shapeView: IShapeView): void
     {
         const documentShape: HTMLElement | null = document.getElementById(shapeView.getUUID());
         if (documentShape === null)
@@ -63,7 +63,7 @@ export default class SelectionView implements ISelectionView
         this.bindCorners();
     }
 
-    public unselect(shapeView: ShapeView): void
+    public unselect(shapeView: IShapeView): void
     {
         const documentShape: HTMLElement | null = document.getElementById(shapeView.getUUID());
 

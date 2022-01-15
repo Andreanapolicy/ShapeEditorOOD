@@ -7,6 +7,7 @@ import ShapeView from '../../View/ShapeView/ShapeView';
 import Selection from '../../View/SelectionView/Selection';
 import IShapePresenter from '../ShapePresenter/IShapePresenter';
 import ICanvasView from '../../View/CanvasView/ICanvasView';
+import IShapeView from '../../View/ShapeView/IShapeView';
 
 export default class CanvasPresenter
 {
@@ -51,11 +52,11 @@ export default class CanvasPresenter
 
     private addShape(shapeModel: IShape): void
     {
-        const newShapeView: ShapeView = new ShapeView(shapeModel.getFrame(), shapeModel.getType());
+        const newShapeView: IShapeView = new ShapeView(shapeModel.getFrame(), shapeModel.getType());
         const newShapePresenter: IShapePresenter = new ShapePresenter(shapeModel, newShapeView);
         this.shapesPresenters.push(newShapePresenter);
 
-        newShapePresenter.doOnChangeShape((shapeView: ShapeView) => this.canvasView.changeShape(shapeView));
+        newShapePresenter.doOnChangeShape((shapeView: IShapeView) => this.canvasView.changeShape(shapeView));
         newShapePresenter.doOnDeleteShape((id: string) => this.deleteShape(id));
 
         this.canvasView.addShape(newShapeView);
