@@ -42,7 +42,7 @@ export default class ResizeUseCase
 
         if (newFrame.width < 15 || newFrame.height < 15)
         {
-            return null
+            return null;
         }
 
         return newFrame;
