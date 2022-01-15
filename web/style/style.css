@@ -44,6 +44,7 @@
 .element
 {
     position: absolute;
+    cursor: pointer;
 }
 
 .corner

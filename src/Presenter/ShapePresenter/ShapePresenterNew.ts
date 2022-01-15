@@ -1,5 +1,6 @@
 import { IShape } from '../../Model/Shape/IShape';
 import ShapeViewNew from '../../View/ShapeView/ShapeViewNew';
+import { Frame } from '../../Сommon/Frame';
 
 export default class ShapePresenterNew
 {
@@ -30,6 +31,17 @@ export default class ShapePresenterNew
     public getShapeView(): ShapeViewNew
     {
         return this.shapeView;
+    }
+
+    public setNewFrameToModel(frame: Frame): void
+    {
+        this.shapeModel.setFrame(frame);
+    }
+
+    public setNewFrameToView(frame: Frame): void
+    {
+        this.shapeView.setFrame(frame);
+        this.doOnChangeShapeCallback.forEach((callback: Function) => callback(this.shapeView))
     }
 
     public doOnDeleteShape(callback: Function): void

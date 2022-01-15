@@ -1,6 +1,7 @@
 import ShapeViewNew from '../ShapeView/ShapeViewNew';
 import DragAndDropUseCaseView from '../../UseCase/DragAndDropUseCase/DragAndDropUseCaseView';
 import { Corners, cornersIDs } from '../Type/CornersIDs';
+import { Point } from '../../Сommon/Point';
 
 export default class SelectionViewNew
 {
@@ -16,13 +17,22 @@ export default class SelectionViewNew
     constructor()
     {
         this.dragAndDropUseCaseView = new DragAndDropUseCaseView();
+        this.dragAndDropUseCaseView.doOnMove((delta: Point) =>
+            this.doOnMoveShapeCallbacks.forEach((callback: Function) => callback(delta)));
+
+        this.dragAndDropUseCaseView.doOnMouseUp((delta: Point) =>
+            this.doOnChangeFrameCallbacks.forEach((callback: Function) => callback(delta)));
     }
 
     public select(shapeView: ShapeViewNew): void
     {
-        console.log('selected');
         const documentShape: HTMLElement | null = document.getElementById('' + shapeView.getId());
         if (documentShape === null)
+        {
+            return;
+        }
+
+        if (documentShape.classList.contains(this.selectedClass))
         {
             return;
         }
@@ -36,18 +46,13 @@ export default class SelectionViewNew
             SelectionViewNew.setCornerPosition(newCorner, cornerID, documentShape);
             documentShape.appendChild(newCorner);
         });
-        // documentShape.addEventListener('mousedown', () => {
-        //     documentShape.addEventListener('mousemove', () => console.log('move'));
-        //     documentShape.addEventListener('mouseup', () => console.log('up'));
-        // });
 
-
+        this.bindShape(documentShape);
+        //this.bindCorners(shapeView.getFrame());
     }
 
     public unselect(shapeView: ShapeViewNew): void
     {
-        console.log('unselected');
-
         const documentShape: HTMLElement | null = document.getElementById('' + shapeView.getId());
 
         if (documentShape === null)
@@ -62,6 +67,21 @@ export default class SelectionViewNew
         }
 
         documentShape.classList.remove(this.selectedClass);
+    }
+
+    public doOnMoveShape(callback: Function): void
+    {
+        this.doOnMoveShapeCallbacks.push(callback);
+    }
+
+    public doOnResizeShape(callback: Function): void
+    {
+        this.doOnResizeShapeCallbacks.push(callback);
+    }
+
+    public doOnChangeFrame(callback: Function): void
+    {
+        this.doOnChangeFrameCallbacks.push(callback);
     }
 
     private static setCornerPosition(corner: HTMLElement, cornerID: string, element: HTMLElement): void
@@ -89,4 +109,25 @@ export default class SelectionViewNew
                 break;
         }
     }
+
+    private bindShape(shape: HTMLElement): void
+    {
+        shape.addEventListener('mousedown', (event: MouseEvent) =>
+        {
+            const cursorPosition: Point = {top: event.pageY, left: event.pageX};
+            this.dragAndDropUseCaseView.mouseDown(cursorPosition);
+        })
+    }
+
+    // private bindCorners(frame: Frame): void
+    // {
+    //     this.cornersIDs.forEach((cornerID: string) => {
+    //         const corner = document.getElementById(cornerID);
+    //         corner?.addEventListener('mousedown', (event: MouseEvent) => {
+    //             const cursorPosition: Point = {top: event.pageY, left: event.pageX};
+    //
+    //             this.resizeUseCaseView.cornerMouseDown(frame, corner as HTMLElement, cursorPosition);
+    //         });
+    //     });
+    // }
 }

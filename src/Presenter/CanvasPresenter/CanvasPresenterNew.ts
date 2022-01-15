@@ -23,25 +23,18 @@ export default class CanvasPresenterNew
         this.canvasView.doOnAddShape((shapeType: ShapeType) => this.model.createShape(shapeType));
 
         this.canvasView.doOnSelectShape((index: number) => {
-            const selectedShape: ShapeViewNew | null = this.selection.getSelected();
-            const indexShape: ShapeViewNew = this.shapesPresenters[index].getShapeView();
-
-            if (selectedShape !== null && selectedShape === indexShape)
-            {
-                return;
-            }
-
-            this.selection.select(indexShape);
+            const indexShapePresenter: ShapePresenterNew = this.shapesPresenters[index];
+            this.selection.select(indexShapePresenter);
         });
 
         this.canvasView.doOnDeleteShape(() => {
-            const selectedShape: ShapeViewNew | null = this.selection.getSelected();
-            if (selectedShape === null)
+            const selectedShapePresenter: ShapePresenterNew | null = this.selection.getSelected();
+            if (selectedShapePresenter === null)
             {
                 return;
             }
 
-            this.model.removeShapeByIndex(selectedShape.getId());
+            this.model.removeShapeByIndex(selectedShapePresenter.getShapeView().getId());
         });
 
         this.canvasView.doOnUnselectShape(() => this.selection.unselect());
@@ -53,20 +46,15 @@ export default class CanvasPresenterNew
         const newShapePresenter: ShapePresenterNew = new ShapePresenterNew(shapeModel, newShapeView);
         this.shapesPresenters.push(newShapePresenter);
 
-        newShapePresenter.doOnChangeShape((shapeView: ShapeViewNew) => this.changeShape(shapeView));
+        newShapePresenter.doOnChangeShape((shapeView: ShapeViewNew) => this.canvasView.changeShape(shapeView));
         newShapePresenter.doOnDeleteShape((index: number) => this.deleteShape(index));
 
         this.canvasView.addShape(newShapeView);
     }
 
-    private changeShape(shapeView: ShapeViewNew): void
-    {
-
-    }
-
     private deleteShape(index: number): void
     {
         this.shapesPresenters.splice(index, 1);
-        this.canvasView.deleteShapeView(index);
+        this.canvasView.deleteShape(index);
     }
 }

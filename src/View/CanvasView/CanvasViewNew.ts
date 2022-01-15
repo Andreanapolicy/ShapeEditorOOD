@@ -69,13 +69,12 @@ export default class CanvasViewNew
         document.getElementById(this.canvasID)?.appendChild(documentShape);
         shapeView.setFrame(shapeView.getFrame());
 
-        documentShape.addEventListener('mousedown', () =>
-            this.doOnSelectShapeCallbacks.forEach((callback: Function) => callback(documentShape.id)));
+        this.bindSelectDocumentShape(documentShape);
 
         CanvasViewNew.setDocumentShapeFrame(documentShape, shapeView.getFrame());
     }
 
-    public deleteShapeView(id: number): void
+    public deleteShape(id: number): void
     {
         const documentShape: HTMLElement | null = document.getElementById('' + id);
         if (documentShape === null)
@@ -86,11 +85,36 @@ export default class CanvasViewNew
         document.getElementById(this.canvasID)?.removeChild(documentShape);
     }
 
+    public changeShape(shapeView: ShapeViewNew): void
+    {
+        const documentShape: HTMLElement | null = document.getElementById('' + shapeView.getId());
+        if (documentShape === null)
+        {
+            return;
+        }
+
+        const documentShapeClone: Node = documentShape.cloneNode();
+        document.getElementById(this.canvasID)?.replaceChild(documentShapeClone, documentShape);
+        documentShapeClone.appendChild(shapeView.getContent().getContent());
+        shapeView.setFrame(shapeView.getFrame());
+
+        this.bindSelectDocumentShape(documentShapeClone as HTMLElement);
+        CanvasViewNew.setDocumentShapeFrame(documentShapeClone as HTMLElement, shapeView.getFrame());
+
+        this.doOnSelectShapeCallbacks.forEach((callback: Function) => callback(shapeView.getId()));
+    }
+
     private static setDocumentShapeFrame(element: HTMLElement, frame: Frame): void
     {
         element.style.width = frame.width + 'px';
         element.style.height = frame.height + 'px';
         element.style.top = frame.leftTopPoint.top + 'px';
-        element.style.left = frame.leftTopPoint.top + 'px';
+        element.style.left = frame.leftTopPoint.left + 'px';
+    }
+
+    private bindSelectDocumentShape(documentShape: HTMLElement): void
+    {
+        documentShape.addEventListener('mousedown', () =>
+            this.doOnSelectShapeCallbacks.forEach((callback: Function) => callback(documentShape.id)));
     }
 }
