@@ -46,18 +46,18 @@ describe('test of resize use case', () =>
         const firstDelta: Point = {top: -5, left: -5};
         const secondDelta: Point = {top: 5, left: 5};
         const startFrame: Frame = {leftTopPoint: {top: 20, left: 20}, width: 20, height: 20};
-        const firstFrame: Frame | null = ResizeUseCase.getResultFrame(firstDelta, startFrame, Corners.bottomRight);
-        const secondFrame: Frame | null = ResizeUseCase.getResultFrame(secondDelta, startFrame, Corners.bottomRight);
+        const firstFrame: Frame | null = ResizeUseCase.getResultFrame(firstDelta, startFrame, Corners.bottomLeft);
+        const secondFrame: Frame | null = ResizeUseCase.getResultFrame(secondDelta, startFrame, Corners.bottomLeft);
 
-        expect(firstFrame).toEqual({leftTopPoint: {top: 20, left: 25}, width: 25, height: 15});
-        expect(secondFrame).toEqual({leftTopPoint: {top: 20, left: 15}, width: 15, height: 25});
+        expect(firstFrame).toEqual({leftTopPoint: {top: 20, left: 15}, width: 25, height: 15});
+        expect(secondFrame).toEqual({leftTopPoint: {top: 20, left: 25}, width: 15, height: 25});
     });
 
     test('check overflow case for corners', () =>
     {
         const topLeftDelta: Point = {top: 10, left: 10};
         const topRightDelta: Point = {top: 10, left: 10};
-        const bottomRightDelta: Point = {top: 10, left: 10};
+        const bottomRightDelta: Point = {top: -10, left: -10};
         const bottomLeftDelta: Point = {top: 10, left: 10};
 
         const startFrame: Frame = {leftTopPoint: {top: 20, left: 20}, width: 20, height: 20};

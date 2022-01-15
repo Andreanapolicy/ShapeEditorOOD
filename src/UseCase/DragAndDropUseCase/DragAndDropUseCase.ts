@@ -5,7 +5,7 @@ export default class DragAndDropUseCase
 {
     private static defaultIndent: number = 30;
 
-    public static checkForScreenCapacity(frame: Frame, scope: Frame, delta: Point = {top: 0, left: 0}): Frame | null
+    public static getResultFrame(delta: Point, frame: Frame, scope: Frame): Frame | null
     {
         if (!(frame.leftTopPoint.left + delta.left < scope.width - DragAndDropUseCase.defaultIndent)
             || !(frame.leftTopPoint.left + delta.left > DragAndDropUseCase.defaultIndent - frame.width)

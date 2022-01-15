@@ -21,7 +21,7 @@ export default class Selection
                 return;
             }
 
-            const newFrame: Frame | null = DragAndDropUseCase.checkForScreenCapacity(this.shapePresenter.getShapeModel().getFrame(), Scope, delta);
+            const newFrame: Frame | null = DragAndDropUseCase.getResultFrame(delta, this.shapePresenter.getShapeModel().getFrame(), Scope);
 
             if (newFrame === null)
             {
@@ -35,7 +35,7 @@ export default class Selection
             {
                 return;
             }
-            const newFrame: Frame | null = DragAndDropUseCase.checkForScreenCapacity(this.shapePresenter.getShapeModel().getFrame(), Scope, delta);
+            const newFrame: Frame | null = DragAndDropUseCase.getResultFrame(delta, this.shapePresenter.getShapeModel().getFrame(), Scope);
 
             if (newFrame === null)
             {
