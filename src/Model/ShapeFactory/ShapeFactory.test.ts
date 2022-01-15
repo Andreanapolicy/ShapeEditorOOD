@@ -9,25 +9,31 @@ describe('test of shape factory', () =>
 {
     test('create circle', () =>
     {
-        const shape: IShape = new Shape(commonFrame, ShapeType.CIRCLE);
+        const shape: IShape = new Shape(commonFrame, ShapeType.CIRCLE, '12321');
         const shapeFactory: IShapeFactory = new ShapeFactory();
+        const shapeFromFactory: IShape = shapeFactory.createShape(ShapeType.CIRCLE);
 
-        expect(shapeFactory.createShape(ShapeType.CIRCLE)).toEqual(shape);
+        expect(shapeFromFactory.getFrame()).toEqual(shape.getFrame());
+        expect(shapeFromFactory.getType()).toEqual(shape.getType());
     });
 
     test('create rectangle', () =>
     {
-        const shape: IShape = new Shape(commonFrame, ShapeType.RECTANGLE);
+        const shape: IShape = new Shape(commonFrame, ShapeType.RECTANGLE, '12321');
         const shapeFactory: IShapeFactory = new ShapeFactory();
+        const shapeFromFactory: IShape = shapeFactory.createShape(ShapeType.RECTANGLE);
 
-        expect(shapeFactory.createShape(ShapeType.RECTANGLE)).toEqual(shape);
+        expect(shapeFromFactory.getFrame()).toEqual(shape.getFrame());
+        expect(shapeFromFactory.getType()).toEqual(shape.getType());
     });
 
     test('create triangle', () =>
     {
-        const shape: IShape = new Shape(commonFrame, ShapeType.TRIANGLE);
+        const shape: IShape = new Shape(commonFrame, ShapeType.TRIANGLE, '12321');
         const shapeFactory: IShapeFactory = new ShapeFactory();
+        const shapeFromFactory: IShape = shapeFactory.createShape(ShapeType.TRIANGLE);
 
-        expect(shapeFactory.createShape(ShapeType.TRIANGLE)).toEqual(shape);
+        expect(shapeFromFactory.getFrame()).toEqual(shape.getFrame());
+        expect(shapeFromFactory.getType()).toEqual(shape.getType());
     });
 });

@@ -1,3 +1,4 @@
+import {v4 as uuid} from 'uuid';
 import { ShapeType } from '../../Model/Type/ShapeType';
 import ShapeContent from '../ShapeContent/ShapeContent';
 import { Frame } from '../../Сommon/Frame';
@@ -5,20 +6,20 @@ import ShapeContentFactory from '../ShapeContentFactory/ShapeContentFactory';
 
 export default class ShapeViewNew
 {
-    private readonly id: number;
+    private readonly UUID: string;
     private readonly shapeContent: ShapeContent;
     private frame: Frame;
 
-    constructor(id: number, frame: Frame, type: ShapeType)
+    constructor(frame: Frame, type: ShapeType)
     {
-        this.id = id;
+        this.UUID = uuid();
         this.frame = frame;
-        this.shapeContent = ShapeContentFactory.createShapeContent(type, '' + id);
+        this.shapeContent = ShapeContentFactory.createShapeContent(type, this.UUID);
     }
 
-    public getId(): number
+    public getUUID(): string
     {
-        return this.id;
+        return this.UUID;
     }
 
     public getContent(): ShapeContent

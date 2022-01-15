@@ -1,12 +1,13 @@
 import { ShapeType } from '../Type/ShapeType';
 import { IShape } from '../Shape/IShape';
+import { ShapeConformity } from './Slide';
 
 export interface ISlide
 {
-    removeShape(shape: IShape): void;
     createShape(type: ShapeType): IShape;
     getShapesCount(): number;
-    getShapeByIndex(index: number): IShape | null;
-    removeShapeByIndex(index: number): void;
+    getShapeByUUID(UUID: string): IShape | null;
+    removeShapeByUUID(UUID: string): void;
     doOnAddShape(callback: Function): void;
+    getConformity(): Array<ShapeConformity>;
 }

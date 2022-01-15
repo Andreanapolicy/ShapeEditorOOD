@@ -63,7 +63,7 @@ export default class CanvasViewNew
     public addShape(shapeView: ShapeViewNew): void
     {
         const documentShape: HTMLElement = document.createElement('div');
-        documentShape.id = '' + shapeView.getId();
+        documentShape.id = shapeView.getUUID();
         documentShape.classList.add(this.shapeClass);
         documentShape.appendChild(shapeView.getContent().getContent());
         document.getElementById(this.canvasID)?.appendChild(documentShape);
@@ -87,7 +87,7 @@ export default class CanvasViewNew
 
     public changeShape(shapeView: ShapeViewNew): void
     {
-        const documentShape: HTMLElement | null = document.getElementById('' + shapeView.getId());
+        const documentShape: HTMLElement | null = document.getElementById(shapeView.getUUID());
         if (documentShape === null)
         {
             return;
@@ -101,7 +101,7 @@ export default class CanvasViewNew
         this.bindSelectDocumentShape(documentShapeClone as HTMLElement);
         CanvasViewNew.setDocumentShapeFrame(documentShapeClone as HTMLElement, shapeView.getFrame());
 
-        this.doOnSelectShapeCallbacks.forEach((callback: Function) => callback(shapeView.getId()));
+        this.doOnSelectShapeCallbacks.forEach((callback: Function) => callback(shapeView.getUUID()));
     }
 
     private static setDocumentShapeFrame(element: HTMLElement, frame: Frame): void

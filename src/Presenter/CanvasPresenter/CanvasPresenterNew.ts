@@ -22,8 +22,15 @@ export default class CanvasPresenterNew
         this.model.doOnAddShape((shapeModel: IShape) => this.addShape(shapeModel));
         this.canvasView.doOnAddShape((shapeType: ShapeType) => this.model.createShape(shapeType));
 
-        this.canvasView.doOnSelectShape((index: number) => {
-            const indexShapePresenter: ShapePresenterNew = this.shapesPresenters[index];
+        this.canvasView.doOnSelectShape((id: string) => {
+            const indexShapePresenter: ShapePresenterNew | undefined = this.shapesPresenters.find((shapePresenter: ShapePresenterNew) =>
+                shapePresenter.getShapeView().getUUID() === id);
+
+            if (indexShapePresenter === undefined)
+            {
+                return;
+            }
+
             this.selection.select(indexShapePresenter);
         });
 
@@ -34,7 +41,7 @@ export default class CanvasPresenterNew
                 return;
             }
 
-            this.model.removeShapeByIndex(selectedShapePresenter.getShapeView().getId());
+            this.model.removeShapeByUUID(selectedShapePresenter.getShapeView().getUUID());
         });
 
         this.canvasView.doOnUnselectShape(() => this.selection.unselect());
@@ -42,7 +49,7 @@ export default class CanvasPresenterNew
 
     private addShape(shapeModel: IShape): void
     {
-        const newShapeView: ShapeViewNew = new ShapeViewNew(this.shapesPresenters.length, shapeModel.getFrame(), shapeModel.getType());
+        const newShapeView: ShapeViewNew = new ShapeViewNew(shapeModel.getFrame(), shapeModel.getType());
         const newShapePresenter: ShapePresenterNew = new ShapePresenterNew(shapeModel, newShapeView);
         this.shapesPresenters.push(newShapePresenter);
 

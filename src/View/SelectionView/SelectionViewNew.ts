@@ -37,7 +37,7 @@ export default class SelectionViewNew
 
     public select(shapeView: ShapeViewNew): void
     {
-        const documentShape: HTMLElement | null = document.getElementById('' + shapeView.getId());
+        const documentShape: HTMLElement | null = document.getElementById(shapeView.getUUID());
         if (documentShape === null)
         {
             return;
@@ -64,7 +64,7 @@ export default class SelectionViewNew
 
     public unselect(shapeView: ShapeViewNew): void
     {
-        const documentShape: HTMLElement | null = document.getElementById('' + shapeView.getId());
+        const documentShape: HTMLElement | null = document.getElementById(shapeView.getUUID());
 
         if (documentShape === null)
         {

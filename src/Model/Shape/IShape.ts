@@ -5,6 +5,7 @@ export interface IShape
 {
     setFrame(frame: Frame): void;
     getType(): ShapeType;
+    getUUID(): string;
     getFrame(): Frame;
     markDeleted(): void;
     doOnChangeFrame(callback: Function): void;

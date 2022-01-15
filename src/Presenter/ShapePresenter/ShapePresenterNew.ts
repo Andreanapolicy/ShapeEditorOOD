@@ -20,7 +20,7 @@ export default class ShapePresenterNew
             this.doOnChangeShapeCallback.forEach((callback: Function) => callback(this.shapeView))
         });
 
-        shape.doOnDelete(() => this.doOnDeleteShapeCallback.forEach((callback: Function) => callback(this.shapeView.getId())));
+        shape.doOnDelete(() => this.doOnDeleteShapeCallback.forEach((callback: Function) => callback(this.shapeView.getUUID())));
     }
 
     public getShapeModel(): IShape

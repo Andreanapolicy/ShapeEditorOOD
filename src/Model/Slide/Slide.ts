@@ -4,10 +4,15 @@ import { IShape } from '../Shape/IShape';
 import { IShapeFactory } from '../ShapeFactory/IShapeFactory';
 import ShapeFactory from '../ShapeFactory/ShapeFactory';
 
+export type ShapeConformity = {
+    uuid: string,
+    shape: IShape
+}
+
 export default class Slide implements ISlide
 {
     private readonly shapeFactory: IShapeFactory;
-    private shapes: Array<IShape> = [];
+    private shapes: Array<ShapeConformity> = [];
     private doOnAddShapeCallbacks: Array<Function> = [];
 
     constructor()
@@ -17,8 +22,9 @@ export default class Slide implements ISlide
 
     public createShape(type: ShapeType): IShape
     {
-        const newShape = this.shapeFactory.createShape(type);
-        this.shapes.push(newShape);
+        const newShape: IShape = this.shapeFactory.createShape(type);
+
+        this.shapes.push({uuid: newShape.getUUID(), shape: newShape});
         this.doOnAddShapeCallbacks.forEach((callback: Function) => callback(newShape));
 
         return newShape;
@@ -34,35 +40,33 @@ export default class Slide implements ISlide
         this.doOnAddShapeCallbacks.push(callback);
     }
 
-    public getShapeByIndex(index: number): IShape | null
+    public getShapeByUUID(UUID: string): IShape | null
     {
-        if (index >= this.shapes.length)
+        const shape: ShapeConformity | undefined = this.shapes.find((conformity: ShapeConformity) => conformity.uuid === UUID);
+
+        if (shape === undefined)
         {
             return null;
         }
 
-        return this.shapes[index];
+        return shape.shape;
     }
 
-    public removeShape(removableShape: IShape): void
+    public removeShapeByUUID(UUID: string): void
     {
-        if (!this.shapes.includes(removableShape))
+        const shape: ShapeConformity | undefined = this.shapes.find((conformity: ShapeConformity) => conformity.uuid === UUID);
+
+        if (shape === undefined)
         {
             return;
         }
 
-        removableShape.markDeleted();
-        this.shapes = this.shapes.filter((shape: IShape) => shape !== removableShape);
+        shape.shape.markDeleted()
+        this.shapes = this.shapes.filter((conformity: ShapeConformity) => conformity.uuid !== UUID);
     }
 
-    public removeShapeByIndex(removableIndex: number): void
+    public getConformity(): Array<ShapeConformity>
     {
-        if (removableIndex > this.shapes.length)
-        {
-            return;
-        }
-
-        this.shapes[removableIndex].markDeleted();
-        this.shapes = this.shapes.filter((shape: IShape, index: number) => index !== removableIndex);
+        return this.shapes;
     }
 }
