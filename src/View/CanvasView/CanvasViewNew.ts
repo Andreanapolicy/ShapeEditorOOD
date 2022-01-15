@@ -1,5 +1,6 @@
 import { ShapeType } from '../../Model/Type/ShapeType';
 import ShapeViewNew from '../ShapeView/ShapeViewNew';
+import { Frame } from '../../Сommon/Frame';
 
 export default class CanvasViewNew
 {
@@ -13,6 +14,7 @@ export default class CanvasViewNew
     private readonly doOnAddShapeCallbacks: Array<Function> = [];
     private readonly doOnDeleteShapeCallbacks: Array<Function> = [];
     private readonly doOnUnselectShapeCallbacks: Array<Function> = [];
+    private readonly doOnSelectShapeCallbacks: Array<Function> = [];
     private readonly shapeClass: string = 'element';
 
     constructor()
@@ -53,6 +55,11 @@ export default class CanvasViewNew
         this.doOnUnselectShapeCallbacks.push(callback);
     }
 
+    public doOnSelectShape(callback: Function): void
+    {
+        this.doOnSelectShapeCallbacks.push(callback);
+    }
+
     public addShape(shapeView: ShapeViewNew): void
     {
         const documentShape: HTMLElement = document.createElement('div');
@@ -61,6 +68,11 @@ export default class CanvasViewNew
         documentShape.appendChild(shapeView.getContent().getContent());
         document.getElementById(this.canvasID)?.appendChild(documentShape);
         shapeView.setFrame(shapeView.getFrame());
+
+        documentShape.addEventListener('mousedown', () =>
+            this.doOnSelectShapeCallbacks.forEach((callback: Function) => callback(documentShape.id)));
+
+        CanvasViewNew.setDocumentShapeFrame(documentShape, shapeView.getFrame());
     }
 
     public deleteShapeView(id: number): void
@@ -72,5 +84,13 @@ export default class CanvasViewNew
         }
 
         document.getElementById(this.canvasID)?.removeChild(documentShape);
+    }
+
+    private static setDocumentShapeFrame(element: HTMLElement, frame: Frame): void
+    {
+        element.style.width = frame.width + 'px';
+        element.style.height = frame.height + 'px';
+        element.style.top = frame.leftTopPoint.top + 'px';
+        element.style.left = frame.leftTopPoint.top + 'px';
     }
 }
