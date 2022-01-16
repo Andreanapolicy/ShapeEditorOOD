@@ -3,10 +3,11 @@ import Rectangle from '../ShapeContent/Rectangle';
 import Circle from '../ShapeContent/Circle';
 import Triangle from '../ShapeContent/Triangle';
 import IShapeContent from '../ShapeContent/IShapeContent';
+import IShapeContentFactory from './IShapeContentFactory';
 
-export default class ShapeContentFactory
+export default class ShapeContentFactory implements IShapeContentFactory
 {
-    public static createShapeContent(shapeType: ShapeType, id: string): IShapeContent
+    public createShapeContent(shapeType: ShapeType, id: string): IShapeContent
     {
         switch (shapeType)
         {

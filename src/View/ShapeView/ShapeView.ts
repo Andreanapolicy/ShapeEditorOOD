@@ -4,18 +4,21 @@ import { Frame } from '../../Сommon/Frame';
 import ShapeContentFactory from '../ShapeContentFactory/ShapeContentFactory';
 import IShapeContent from '../ShapeContent/IShapeContent';
 import IShapeView from './IShapeView';
+import IShapeContentFactory from '../ShapeContentFactory/IShapeContentFactory';
 
 export default class ShapeView implements IShapeView
 {
     private readonly UUID: string;
     private readonly shapeContent: IShapeContent;
+    private readonly shapeContentFactory: IShapeContentFactory;
     private frame: Frame;
 
     constructor(frame: Frame, type: ShapeType)
     {
         this.UUID = uuid();
         this.frame = frame;
-        this.shapeContent = ShapeContentFactory.createShapeContent(type, this.UUID);
+        this.shapeContentFactory = new ShapeContentFactory();
+        this.shapeContent = this.shapeContentFactory.createShapeContent(type, this.UUID);
     }
 
     public getUUID(): string
