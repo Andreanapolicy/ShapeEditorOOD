@@ -16,7 +16,7 @@ export default class Selection
     constructor()
     {
         this.selectionView = new SelectionView();
-        this.selectionView.doOnMoveShape((delta: Point) => {
+        this.selectionView.doOnMoveShapeWhileMoving((delta: Point) => {
             if (this.shapePresenter === null)
             {
                 return;
@@ -31,7 +31,7 @@ export default class Selection
             this.shapePresenter.setNewFrameToView(newFrame);
         });
 
-        this.selectionView.doOnChangeFrame((delta: Point) => {
+        this.selectionView.doOnMoveShapeWhileMouseUp((delta: Point) => {
             if (this.shapePresenter === null)
             {
                 return;

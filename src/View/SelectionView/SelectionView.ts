@@ -15,10 +15,10 @@ export default class SelectionView implements ISelectionView
 
     private readonly dragAndDropUseCaseView: IDragAndDropUseCaseView;
     private readonly resizeUseCaseView: IResizeUseCaseView;
-    private doOnMoveShapeCallbacks: Array<Function> = [];
+    private doOnMoveShapeWhileMovingCallbacks: Array<Function> = [];
     private doOnResizeWhileMovingShapeCallbacks: Array<Function> = [];
     private doOnResizeWhileMouseUpShapeCallbacks: Array<Function> = [];
-    private doOnChangeFrameCallbacks: Array<Function> = [];
+    private doOnMoveShapeWhileMouseUpCallbacks: Array<Function> = [];
 
     constructor()
     {
@@ -26,10 +26,10 @@ export default class SelectionView implements ISelectionView
         this.resizeUseCaseView = new ResizeUseCaseView();
 
         this.dragAndDropUseCaseView.doOnMove((delta: Point) =>
-            this.doOnMoveShapeCallbacks.forEach((callback: Function) => callback(delta)));
+            this.doOnMoveShapeWhileMovingCallbacks.forEach((callback: Function) => callback(delta)));
 
         this.dragAndDropUseCaseView.doOnMouseUp((delta: Point) =>
-            this.doOnChangeFrameCallbacks.forEach((callback: Function) => callback(delta)));
+            this.doOnMoveShapeWhileMouseUpCallbacks.forEach((callback: Function) => callback(delta)));
 
         this.resizeUseCaseView.doOnChangeSize((delta: Point, cornerType: Corners) =>
             this.doOnResizeWhileMovingShapeCallbacks.forEach((callback: Function) => callback(delta, cornerType)));
@@ -83,9 +83,9 @@ export default class SelectionView implements ISelectionView
         documentShape.classList.remove(this.selectedClass);
     }
 
-    public doOnMoveShape(callback: Function): void
+    public doOnMoveShapeWhileMoving(callback: Function): void
     {
-        this.doOnMoveShapeCallbacks.push(callback);
+        this.doOnMoveShapeWhileMovingCallbacks.push(callback);
     }
 
     public doOnResizeWhileMovingShape(callback: Function): void
@@ -98,9 +98,9 @@ export default class SelectionView implements ISelectionView
         this.doOnResizeWhileMouseUpShapeCallbacks.push(callback);
     }
 
-    public doOnChangeFrame(callback: Function): void
+    public doOnMoveShapeWhileMouseUp(callback: Function): void
     {
-        this.doOnChangeFrameCallbacks.push(callback);
+        this.doOnMoveShapeWhileMouseUpCallbacks.push(callback);
     }
 
     private static setCornerPosition(corner: HTMLElement, cornerID: string, element: HTMLElement): void
